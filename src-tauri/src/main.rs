@@ -4,7 +4,6 @@
 use serde::{ Serialize, Deserialize };
 use std::{ path::Path, fs };
 use webp::*;
-use futures::executor::block_on;
 
 #[derive(Serialize, Deserialize)]
 struct Image {
@@ -13,7 +12,7 @@ struct Image {
   quality: i8,
 }
 
-async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
+async fn process_images(files: Vec<Image>, folder_to_save: String) -> i8 {
   let mut converted_files = 0;
 
   for file in files {
@@ -21,7 +20,7 @@ async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
 
     let encoder = Encoder::from_image(&img).unwrap();
     let webp: WebPMemory = encoder.encode(file.quality as f32);
-    let output_path = Path::new(folder_to_save).join(file.name).with_extension("webp");
+    let output_path = Path::new(&folder_to_save).join(file.name).with_extension("webp");
     fs::write(&output_path, &*webp).unwrap();
 
     converted_files += 1;
@@ -31,8 +30,10 @@ async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
 }
 
 #[tauri::command]
-fn convert_images(files: Vec<Image>, folder_to_save: &str) {
-  block_on(process_images(files, folder_to_save)); // TODO: Implement a non-blocking method
+async fn convert_images(files: Vec<Image>, folder_to_save: String) -> i8 {
+  let converted_images = process_images(files, folder_to_save).await;
+
+  return converted_images;
 }
 
 fn main() {
