@@ -1,24 +1,13 @@
 import { FC, PropsWithChildren } from 'react';
 
 interface TableRowProps extends PropsWithChildren {
-  /**
-   * If `true`, the element will have a `flex: 1` style property
-   */
-  extend?: boolean;
-
   className?: string;
 }
 
-const TableRow: FC<TableRowProps> = ({
-  children,
-  extend = false,
-  className = '',
-}) => {
+const TableRow: FC<TableRowProps> = ({ children, className = '' }) => {
   return (
     <td
-      className={`px-4 py-2 border-2 border-neutral-800 ${
-        extend ? 'flex-1' : ''
-      } ${className}`}
+      className={`px-3 py-2 border-2 border-neutral-600 select-none ${className}`}
     >
       {children}
     </td>

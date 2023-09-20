@@ -18,4 +18,15 @@ export interface Image {
    * Convertion quality of the image (0 to 100)
    */
   quality: number;
+
+  /**
+   * Format that the image will be converted to
+   */
+  format: ImageFormat;
+}
+
+export enum ImageFormat {
+  WEBP,
+  JPG,
+  PNG,
 }

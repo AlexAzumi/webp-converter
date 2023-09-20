@@ -4,7 +4,7 @@ import { open } from '@tauri-apps/api/dialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 
-import { Image } from './interfaces/Image';
+import { Image, ImageFormat } from './interfaces/Image';
 
 import { Button } from './components/Button';
 import { TableHeader } from './components/TableHeader';
@@ -14,7 +14,7 @@ import { Loader } from './components/Loader';
 
 import appConfig from './config.app.json';
 
-function App() {
+const App = () => {
   const [selectedImages, setSelectedImages] = useState<Image[]>([]);
   const [processing, setProcessing] = useState(false);
   const [messageBoxData, setMessageBoxData] = useState({
@@ -22,6 +22,8 @@ function App() {
     show: false,
     duration: 10,
   });
+
+  console.log(selectedImages);
 
   const checkIfSelectedAll = useCallback(() => {
     if (!selectedImages?.length) {
@@ -67,6 +69,19 @@ function App() {
     [selectedImages],
   );
 
+  const handleChangeFormat = useCallback(
+    (index: number, newFormat: ImageFormat) => {
+      const imageToChange = selectedImages[index];
+      imageToChange.format = newFormat;
+
+      const temp = [...selectedImages];
+      temp[index] = imageToChange;
+
+      setSelectedImages([...temp]);
+    },
+    [selectedImages],
+  );
+
   const handleClickDelete = useCallback(
     (index: number) => {
       const temp = [...selectedImages];
@@ -87,7 +102,7 @@ function App() {
       filters: [
         {
           name: 'Image',
-          extensions: ['png', 'jpeg', 'jpg'],
+          extensions: ['png', 'jpeg', 'jpg', 'webp'],
         },
       ],
       title: 'Select files to add to the query',
@@ -95,10 +110,24 @@ function App() {
 
     if (selectedFiles && typeof selectedFiles === 'object') {
       const mappedImages = selectedFiles.map((item) => {
-        const splitName = item.split('\\');
+        const splittedPath = item.split('\\');
+        const name = splittedPath[splittedPath.length - 1];
+
+        let format: ImageFormat;
+
+        if (
+          name.toLocaleLowerCase().endsWith('.jpg') ||
+          name.toLocaleLowerCase().endsWith('.png') ||
+          name.toLocaleLowerCase().endsWith('.jpeg')
+        ) {
+          format = ImageFormat.WEBP;
+        } else {
+          format = ImageFormat.PNG;
+        }
 
         return {
-          name: splitName[splitName.length - 1],
+          format,
+          name,
           quality: 100,
           selected: true,
           src: item,
@@ -125,7 +154,9 @@ function App() {
       setProcessing(true);
 
       invoke('convert_images', {
-        files: selectedImages.filter((item) => item.selected),
+        files: selectedImages
+          .filter((item) => item.selected)
+          .map((item) => ({ ...item, format: ImageFormat[item.format] })),
         folderToSave,
       })
         .then((count) => {
@@ -185,10 +216,10 @@ function App() {
         {/* Table */}
         <div>
           <h2 className='text-2xl font-semibold mb-2'>Selected images</h2>
-          <table className='table-auto w-full text-left'>
+          <table className='table-fixed w-full text-left'>
             <thead>
               <tr className='mb-2'>
-                <TableHeader className='text-center'>
+                <TableHeader className='text-center w-1/12'>
                   <input
                     type='checkbox'
                     checked={checkIfSelectedAll()}
@@ -197,10 +228,11 @@ function App() {
                     }
                   />
                 </TableHeader>
-                <TableHeader>Name</TableHeader>
-                <TableHeader extend>Path</TableHeader>
-                <TableHeader>Quality</TableHeader>
-                <TableHeader>Delete</TableHeader>
+                <TableHeader className='w-2/12'>Name</TableHeader>
+                <TableHeader className='w-5/12'>Path</TableHeader>
+                <TableHeader className='w-1/12'>Quality</TableHeader>
+                <TableHeader className='w-1/12'>Convert to</TableHeader>
+                <TableHeader className='w-1/12'>Remove</TableHeader>
               </tr>
             </thead>
             <tbody>
@@ -213,11 +245,17 @@ function App() {
                       onChange={() => handleClickRowCheckbox(index)}
                     />
                   </TableRow>
-                  <TableRow>{item.name}</TableRow>
-                  <TableRow extend>{item.src}</TableRow>
+                  <TableRow className='whitespace-nowrap overflow-hidden text-ellipsis'>
+                    {item.name}
+                  </TableRow>
+                  <TableRow className='whitespace-nowrap overflow-hidden text-ellipsis'>
+                    {item.src}
+                  </TableRow>
                   <TableRow className='text-center'>
                     <select
+                      className='border rounded px-2 py-1'
                       value={item.quality}
+                      disabled={processing || item.format != ImageFormat.WEBP}
                       onChange={(event) =>
                         handleChangeQuality(
                           index,
@@ -225,16 +263,37 @@ function App() {
                         )
                       }
                     >
-                      {appConfig.qualityOptions.map((item) => (
-                        <option key={`option-${item}`} value={item}>
-                          {item}
+                      {appConfig.qualityOptions.map((quality) => (
+                        <option key={`quality-${quality}`} value={quality}>
+                          {quality}
                         </option>
                       ))}
                     </select>
                   </TableRow>
                   <TableRow className='text-center'>
+                    <select
+                      className='border rounded px-2 py-1'
+                      disabled={processing}
+                      value={item.format}
+                      onChange={(event) =>
+                        handleChangeFormat(
+                          index,
+                          parseInt(event.currentTarget.value),
+                        )
+                      }
+                    >
+                      {Object.keys(ImageFormat)
+                        .filter((item) => isNaN(Number(item)))
+                        .map((format, index) => (
+                          <option key={`format-${format}`} value={index}>
+                            {format}
+                          </option>
+                        ))}
+                    </select>
+                  </TableRow>
+                  <TableRow className='text-center'>
                     <FontAwesomeIcon
-                      className='text-red-800 hover:cursor-pointer'
+                      className='text-neutral-800 hover:cursor-pointer'
                       icon={faTrash}
                       onClick={() => handleClickDelete(index)}
                     />
@@ -247,6 +306,6 @@ function App() {
       </div>
     </>
   );
-}
+};
 
 export default App;
