@@ -1,6 +1,6 @@
 export interface Image {
   /**
-   * Whether if convert or not the image
+   * If set to `true`, the image will be processed in the next batch, otherwise will be ignored
    */
   selected: boolean;
 
@@ -10,12 +10,12 @@ export interface Image {
   name: string;
 
   /**
-   * Path of the image
+   * Full path of the image
    */
   src: string;
 
   /**
-   * Convertion quality of the image (0 to 100)
+   * Convertion quality of the image (0 to 100) | `Note: Only applies to .webp convertion`
    */
   quality: number;
 

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 
 interface MessageBoxProps {
   /**
@@ -35,10 +35,13 @@ const MessageBox: FC<MessageBoxProps> = ({
     return null;
   }
 
-  return (
-    <div className='flex fixed top-5 right-5 px-6 py-4 bg-neutral-50 rounded shadow-lg border z-10'>
-      <p>{message}</p>
-    </div>
+  return useMemo(
+    () => (
+      <div className='flex fixed top-5 right-5 px-6 py-4 bg-neutral-50 rounded shadow-lg border z-10 select-none'>
+        <p>{message}</p>
+      </div>
+    ),
+    [message, show],
   );
 };
 
