@@ -7,16 +7,18 @@ import { Image } from './interfaces/Image';
 import { Button } from './components/Button';
 import { TableHeader } from './components/TableHeader';
 import { TableRow } from './components/TableRow';
+import { MessageBox } from './components/MessageBox';
 
 import appConfig from './config.app.json';
 
 function App() {
   const [selectedImages, setSelectedImages] = useState<Image[]>([]);
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    //setGreetMsg(await invoke('greet', { name }));
-  }
+  const [processing, setProcessing] = useState(false);
+  const [messageBoxData, setMessageBoxData] = useState({
+    message: '',
+    show: false,
+    duration: 10,
+  });
 
   const checkIfSelectedAll = useCallback(() => {
     if (!selectedImages?.length) {
@@ -105,83 +107,118 @@ function App() {
     }
   }, [selectedImages]);
 
-  const handleClickConvert = useCallback(() => {
-    const folderToSave = open({
+  const handleClickConvert = useCallback(async () => {
+    const folderToSave = await open({
       multiple: false,
       directory: true,
       title: 'Select the folder to save the converted files',
     });
+
+    if (folderToSave && typeof folderToSave === 'string') {
+      setProcessing(true);
+
+      invoke('convert_images', {
+        files: selectedImages,
+        folderToSave,
+      })
+        .then((count) => {
+          setMessageBoxData({
+            ...messageBoxData,
+            message: `Processed ${count} of ${selectedImages.length} images`,
+            show: true,
+          });
+        })
+        .catch(console.error)
+        .then(() => setProcessing(false));
+    }
   }, [selectedImages]);
 
   return (
-    <div className='px-6 py-4'>
-      <div className='border-neutral-800 border-b-2 pb-4 mb-4'>
-        <h1 className='text-3xl font-semibold'>WebP converter by AlexAzumi</h1>
-      </div>
-      <div className='flex justify-between mb-4'>
-        <Button onClick={handleClickOpen}>Add images</Button>
-        <Button disabled={!selectedImages?.length} onClick={handleClickConvert}>
-          Convert selected images
-        </Button>
-      </div>
-      <div>
-        <h2 className='text-2xl font-semibold mb-2'>Selected images</h2>
-        <table className='table-auto w-full text-left'>
-          <thead>
-            <tr className='mb-2'>
-              <TableHeader>
-                <input
-                  type='checkbox'
-                  checked={checkIfSelectedAll()}
-                  onChange={(event) =>
-                    handleClickColCheckbox(event.currentTarget.checked)
-                  }
-                />
-              </TableHeader>
-              <TableHeader>Name</TableHeader>
-              <TableHeader extend>Path</TableHeader>
-              <TableHeader>Quality</TableHeader>
-              <TableHeader>Delete</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {selectedImages.map((item, index) => (
-              <tr key={item.name} className='mb-2 last-of-type:mb-0'>
-                <TableRow>
+    <>
+      {/* Message box */}
+      <MessageBox
+        duration={messageBoxData.duration}
+        message={messageBoxData.message}
+        onDismiss={() => setMessageBoxData({ ...messageBoxData, show: false })}
+        show={messageBoxData.show}
+      />
+      {/* Content */}
+      <div className='px-6 py-4'>
+        <div className='border-neutral-800 border-b-2 pb-4 mb-4'>
+          <h1 className='text-3xl font-semibold'>
+            WebP converter by AlexAzumi
+          </h1>
+        </div>
+        <div className='flex justify-between mb-4'>
+          <Button onClick={handleClickOpen} disabled={processing}>
+            Add images
+          </Button>
+          <Button
+            disabled={!selectedImages?.length || processing}
+            onClick={handleClickConvert}
+          >
+            Convert selected images
+          </Button>
+        </div>
+        <div>
+          <h2 className='text-2xl font-semibold mb-2'>Selected images</h2>
+          <table className='table-auto w-full text-left'>
+            <thead>
+              <tr className='mb-2'>
+                <TableHeader className='text-center'>
                   <input
                     type='checkbox'
-                    checked={item.selected}
-                    onChange={() => handleClickRowCheckbox(index)}
-                  />
-                </TableRow>
-                <TableRow>{item.name}</TableRow>
-                <TableRow extend>{item.src}</TableRow>
-                <TableRow>
-                  <select
-                    value={item.quality}
+                    checked={checkIfSelectedAll()}
                     onChange={(event) =>
-                      handleChangeQuality(
-                        index,
-                        parseInt(event.currentTarget.value),
-                      )
+                      handleClickColCheckbox(event.currentTarget.checked)
                     }
-                  >
-                    {appConfig.qualityOptions.map((item) => (
-                      <option key={`option-${item}`} value={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-                </TableRow>
-                <TableRow>
-                  <p onClick={() => handleClickDelete(index)}>Delete</p>
-                </TableRow>
+                  />
+                </TableHeader>
+                <TableHeader>Name</TableHeader>
+                <TableHeader extend>Path</TableHeader>
+                <TableHeader>Quality</TableHeader>
+                <TableHeader>Delete</TableHeader>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {selectedImages.map((item, index) => (
+                <tr key={item.name} className='mb-2 last-of-type:mb-0'>
+                  <TableRow className='text-center'>
+                    <input
+                      type='checkbox'
+                      checked={item.selected}
+                      onChange={() => handleClickRowCheckbox(index)}
+                    />
+                  </TableRow>
+                  <TableRow>{item.name}</TableRow>
+                  <TableRow extend>{item.src}</TableRow>
+                  <TableRow>
+                    <select
+                      value={item.quality}
+                      onChange={(event) =>
+                        handleChangeQuality(
+                          index,
+                          parseInt(event.currentTarget.value),
+                        )
+                      }
+                    >
+                      {appConfig.qualityOptions.map((item) => (
+                        <option key={`option-${item}`} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </TableRow>
+                  <TableRow>
+                    <p onClick={() => handleClickDelete(index)}>Delete</p>
+                  </TableRow>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
