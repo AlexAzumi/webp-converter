@@ -4,6 +4,7 @@
 use serde::{ Serialize, Deserialize };
 use std::{ path::Path, fs };
 use webp::*;
+use futures::executor::block_on;
 
 #[derive(Serialize, Deserialize)]
 struct Image {
@@ -12,8 +13,7 @@ struct Image {
   quality: i8,
 }
 
-#[tauri::command]
-fn convert_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
+async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
   let mut converted_files = 0;
 
   for file in files {
@@ -28,6 +28,11 @@ fn convert_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
   }
 
   return converted_files;
+}
+
+#[tauri::command]
+fn convert_images(files: Vec<Image>, folder_to_save: &str) {
+  block_on(process_images(files, folder_to_save)); // TODO: Implement a non-blocking method
 }
 
 fn main() {
