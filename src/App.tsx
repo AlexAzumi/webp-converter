@@ -143,23 +143,27 @@ function App() {
         show={messageBoxData.show}
       />
       {/* Content */}
-      <div className='px-6 py-4'>
-        <div className='border-neutral-800 border-b-2 pb-4 mb-4'>
-          <h1 className='text-3xl font-semibold'>
-            WebP converter by AlexAzumi
-          </h1>
+      <div className='px-6 bg-neutral-50'>
+        {/* Header */}
+        <div className='sticky top-0 bg-neutral-50 py-4'>
+          <div className='border-neutral-800 border-b-2 pb-4 mb-4'>
+            <h1 className='text-3xl font-semibold'>
+              WebP converter by AlexAzumi
+            </h1>
+          </div>
+          <div className='flex justify-between'>
+            <Button onClick={handleClickOpen} disabled={processing}>
+              Add images
+            </Button>
+            <Button
+              disabled={!selectedImages?.length || processing}
+              onClick={handleClickConvert}
+            >
+              Convert selected images
+            </Button>
+          </div>
         </div>
-        <div className='flex justify-between mb-4'>
-          <Button onClick={handleClickOpen} disabled={processing}>
-            Add images
-          </Button>
-          <Button
-            disabled={!selectedImages?.length || processing}
-            onClick={handleClickConvert}
-          >
-            Convert selected images
-          </Button>
-        </div>
+        {/* Table */}
         <div>
           <h2 className='text-2xl font-semibold mb-2'>Selected images</h2>
           <table className='table-auto w-full text-left'>
