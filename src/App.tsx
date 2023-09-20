@@ -81,6 +81,7 @@ function App() {
           extensions: ['png', 'jpeg', 'jpg'],
         },
       ],
+      title: 'Select files to add to the query',
     });
 
     if (selectedFiles && typeof selectedFiles === 'object') {
@@ -104,7 +105,13 @@ function App() {
     }
   }, [selectedImages]);
 
-  const handleClickConvert = useCallback(() => {}, [selectedImages]);
+  const handleClickConvert = useCallback(() => {
+    const folderToSave = open({
+      multiple: false,
+      directory: true,
+      title: 'Select the folder to save the converted files',
+    });
+  }, [selectedImages]);
 
   return (
     <div className='px-6 py-4'>
