@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { open } from '@tauri-apps/api/dialog';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 
 import { Image } from './interfaces/Image';
 
@@ -8,6 +10,7 @@ import { Button } from './components/Button';
 import { TableHeader } from './components/TableHeader';
 import { TableRow } from './components/TableRow';
 import { MessageBox } from './components/MessageBox';
+import { Loader } from './components/Loader';
 
 import appConfig from './config.app.json';
 
@@ -74,6 +77,10 @@ function App() {
     [selectedImages],
   );
 
+  const handleClickClearQuery = useCallback(() => {
+    setSelectedImages([]);
+  }, []);
+
   const handleClickOpen = useCallback(async () => {
     const selectedFiles = await open({
       multiple: true,
@@ -118,13 +125,15 @@ function App() {
       setProcessing(true);
 
       invoke('convert_images', {
-        files: selectedImages,
+        files: selectedImages.filter((item) => item.selected),
         folderToSave,
       })
         .then((count) => {
           setMessageBoxData({
             ...messageBoxData,
-            message: `Processed ${count} of ${selectedImages.length} images`,
+            message: `Processed ${count} of ${
+              selectedImages.filter((item) => item.selected).length
+            } images`,
             show: true,
           });
         })
@@ -142,6 +151,8 @@ function App() {
         onDismiss={() => setMessageBoxData({ ...messageBoxData, show: false })}
         show={messageBoxData.show}
       />
+      {/* Loader screen */}
+      <Loader show={processing} />
       {/* Content */}
       <div className='px-6 bg-neutral-50'>
         {/* Header */}
@@ -152,9 +163,17 @@ function App() {
             </h1>
           </div>
           <div className='flex justify-between'>
-            <Button onClick={handleClickOpen} disabled={processing}>
-              Add images
-            </Button>
+            <div className='space-x-4'>
+              <Button onClick={handleClickOpen} disabled={processing}>
+                Add images
+              </Button>
+              <Button
+                onClick={handleClickClearQuery}
+                disabled={!selectedImages?.length || processing}
+              >
+                Clear query
+              </Button>
+            </div>
             <Button
               disabled={!selectedImages?.length || processing}
               onClick={handleClickConvert}
@@ -196,7 +215,7 @@ function App() {
                   </TableRow>
                   <TableRow>{item.name}</TableRow>
                   <TableRow extend>{item.src}</TableRow>
-                  <TableRow>
+                  <TableRow className='text-center'>
                     <select
                       value={item.quality}
                       onChange={(event) =>
@@ -213,8 +232,12 @@ function App() {
                       ))}
                     </select>
                   </TableRow>
-                  <TableRow>
-                    <p onClick={() => handleClickDelete(index)}>Delete</p>
+                  <TableRow className='text-center'>
+                    <FontAwesomeIcon
+                      className='text-red-800 hover:cursor-pointer'
+                      icon={faTrash}
+                      onClick={() => handleClickDelete(index)}
+                    />
                   </TableRow>
                 </tr>
               ))}
