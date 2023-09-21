@@ -20,6 +20,12 @@
   src: url(/fonts/Poppins-SemiBold.ttf);
 }
 
+@font-face {
+  font-family: Poppins;
+  font-weight: 700;
+  src: url(/fonts/Poppins-Bold.ttf);
+}
+
 * {
   font-family: Poppins;
   font-weight: 300;

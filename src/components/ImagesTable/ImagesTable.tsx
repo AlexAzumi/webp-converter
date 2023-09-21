@@ -50,7 +50,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
 
   return useMemo(
     () => (
-      <table className='table-fixed w-full text-left'>
+      <table className='table-fixed w-full text-left mb-4'>
         <thead>
           <tr className='mb-2'>
             <TableHeader className='text-center w-1/12'>

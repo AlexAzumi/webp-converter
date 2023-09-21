@@ -7,7 +7,7 @@ interface TableRowProps extends PropsWithChildren {
 const TableRow: FC<TableRowProps> = ({ children, className = '' }) => {
   return (
     <td
-      className={`px-3 py-2 border-2 border-neutral-600 select-none ${className}`}
+      className={`px-3 py-2 border-2 border-sky-600 select-none ${className}`}
     >
       {children}
     </td>

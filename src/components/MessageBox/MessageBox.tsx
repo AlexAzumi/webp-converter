@@ -1,4 +1,9 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faCircleCheck,
+  faCircleXmark,
+} from '@fortawesome/free-solid-svg-icons';
 
 interface MessageBoxProps {
   /**
@@ -16,6 +21,8 @@ interface MessageBoxProps {
    */
   show: boolean;
 
+  type: string;
+
   onDismiss(): void;
 }
 
@@ -24,6 +31,7 @@ const MessageBox: FC<MessageBoxProps> = ({
   message,
   onDismiss,
   show,
+  type,
 }) => {
   useEffect(() => {
     if (show) {
@@ -35,13 +43,16 @@ const MessageBox: FC<MessageBoxProps> = ({
     return null;
   }
 
-  return useMemo(
-    () => (
-      <div className='flex fixed top-5 right-5 px-6 py-4 bg-neutral-50 rounded shadow-lg border z-10 select-none'>
-        <p>{message}</p>
-      </div>
-    ),
-    [message, show],
+  return (
+    <div className='flex fixed bottom-5 right-5 px-6 py-4 items-center bg-sky-600 text-neutral-50 shadow-lg border z-10 select-none max-w-max'>
+      {type === 'Error' ? (
+        <FontAwesomeIcon className='mr-3' icon={faCircleXmark} />
+      ) : null}
+      {type === 'Success' ? (
+        <FontAwesomeIcon className='mr-3' icon={faCircleCheck} />
+      ) : null}
+      <p>{message}</p>
+    </div>
   );
 };
 

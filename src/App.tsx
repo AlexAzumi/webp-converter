@@ -16,7 +16,8 @@ const App = () => {
   const [messageBoxData, setMessageBoxData] = useState({
     message: '',
     show: false,
-    duration: 10,
+    duration: 6,
+    type: 'Success',
   });
 
   const handleClickRowCheckbox = useCallback(
@@ -167,6 +168,7 @@ const App = () => {
         message={messageBoxData.message}
         onDismiss={() => setMessageBoxData({ ...messageBoxData, show: false })}
         show={messageBoxData.show}
+        type={messageBoxData.type}
       />
       {/* Loader screen */}
       <Loader show={processing} />
@@ -179,7 +181,7 @@ const App = () => {
           handleClickOpen={handleClickOpen}
           processing={processing}
           selectedImages={selectedImages}
-          title='WebP Converter by AlexAzumi'
+          title='WebP Converter'
         />
         {/* Table */}
         <ImagesTable
