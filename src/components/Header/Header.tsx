@@ -42,7 +42,8 @@ const Header: FC<HeaderProps> = ({
     () => (
       <div className='sticky top-0 py-4 bg-neutral-50'>
         <div className='flex border p-6 justify-between items-center shadow-lg mb-4'>
-          <h1 className='text-4xl font-bold select-none mb-0 text-neutral-800'>
+          <h1 className='flex items-center text-4xl font-bold select-none mb-0 text-neutral-800'>
+            <img className='mr-3' src='/logo.svg' width={50} />
             {title}
           </h1>
           <Button
