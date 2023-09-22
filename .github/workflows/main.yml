@@ -14,6 +14,9 @@ jobs:
       matrix:
         platform: [macos-latest, ubuntu-20.04, windows-latest]
     environment: Production
+    env:
+      TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+      TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
     runs-on: ${{ matrix.platform }}
 
     steps:
