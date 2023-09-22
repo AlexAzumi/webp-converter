@@ -1,5 +1,6 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/alexazumi/webp-converter/badge)](https://www.codefactor.io/repository/github/alexazumi/webp-converter)
 [![Release](https://github.com/AlexAzumi/webp-converter/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/AlexAzumi/webp-converter/actions/workflows/main.yml)
+
 # WebP Converter
 
 Multi-platform desktop app that lets you convert `.webp` images to `.jpg` or `.png`, and viceversa!
@@ -8,7 +9,7 @@ Multi-platform desktop app that lets you convert `.webp` images to `.jpg` or `.p
 
 # Installation
 
-You can find the binaries from [here](/releases). Available for Windows, MacOS and Linux.
+You can find the binaries [here](/releases). Available for Windows, MacOS and Linux.
 
 # Build the app
 

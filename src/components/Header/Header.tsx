@@ -1,11 +1,14 @@
 import { FC, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGears, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faGears,
+  faCirclePlus,
+  faCircleMinus,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { Image } from '../../interfaces/Image';
 
 import { Button } from '../Button';
-import { faCircleMinus } from '@fortawesome/free-solid-svg-icons/faCircleMinus';
 
 interface HeaderProps {
   /**
