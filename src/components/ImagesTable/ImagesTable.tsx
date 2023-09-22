@@ -93,7 +93,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
               </TableRow>
               <TableRow className='text-center'>
                 <select
-                  className='border rounded px-2 py-1'
+                  className='border px-2 py-1'
                   value={item.quality}
                   disabled={processing || item.format != ImageFormat.WEBP}
                   onChange={(event) =>
@@ -112,7 +112,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
               </TableRow>
               <TableRow className='text-center'>
                 <select
-                  className='border rounded px-2 py-1'
+                  className='border px-2 py-1'
                   disabled={processing}
                   value={item.format}
                   onChange={(event) =>
