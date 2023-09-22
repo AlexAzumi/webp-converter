@@ -1,5 +1,5 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/alexazumi/webp-converter/badge)](https://www.codefactor.io/repository/github/alexazumi/webp-converter)
-[![Release](https://github.com/AlexAzumi/webp-converter/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/AlexAzumi/webp-converter/actions/workflows/main.yml)
+[![Release](https://github.com/AlexAzumi/webp-converter/actions/workflows/main.yml/badge.svg)](https://github.com/AlexAzumi/webp-converter/actions/workflows/main.yml)
 
 # WebP Converter
 
