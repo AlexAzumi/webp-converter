@@ -79,10 +79,16 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   onChange={() => handleClickRowCheckbox(index)}
                 />
               </TableRow>
-              <TableRow className='whitespace-nowrap overflow-hidden text-ellipsis'>
+              <TableRow
+                className='whitespace-nowrap overflow-hidden text-ellipsis'
+                showDataTooltip
+              >
                 {item.name}
               </TableRow>
-              <TableRow className='whitespace-nowrap overflow-hidden text-ellipsis'>
+              <TableRow
+                className='whitespace-nowrap overflow-hidden text-ellipsis'
+                showDataTooltip
+              >
                 {item.src}
               </TableRow>
               <TableRow className='text-center'>
