@@ -1,7 +1,15 @@
-# Tauri + React + Typescript
+[![CodeFactor](https://www.codefactor.io/repository/github/alexazumi/webp-converter/badge)](https://www.codefactor.io/repository/github/alexazumi/webp-converter)
+[![Release](https://github.com/AlexAzumi/webp-converter/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/AlexAzumi/webp-converter/actions/workflows/main.yml)
+# WebP Converter
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+Multi-platform desktop app that lets you convert `.webp` images to `.jpg` or `.png`, and viceversa!
 
-## Recommended IDE Setup
+![image](https://github.com/AlexAzumi/webp-converter/assets/20672555/15fc79f2-8ac6-4921-91a8-6d8774b52fee)
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+# Installation
+
+You can find the binaries from [here](/releases). Available for Windows, MacOS and Linux.
+
+# Build the app
+
+Coming soon ™
