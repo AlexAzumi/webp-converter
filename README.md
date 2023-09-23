@@ -9,7 +9,7 @@ Multi-platform desktop app that lets you convert `.webp` images to `.jpg` or `.p
 
 # Installation
 
-You can find the binaries [here](/releases). Available for Windows, MacOS and Linux.
+You can find the binaries [here](https://github.com/AlexAzumi/webp-converter/releases). Available for Windows, MacOS and Linux.
 
 # Build the app
 
