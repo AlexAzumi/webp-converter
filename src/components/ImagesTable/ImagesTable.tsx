@@ -133,7 +133,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
               </TableRow>
               <TableRow className='text-center'>
                 <FontAwesomeIcon
-                  className='text-neutral-800 hover:cursor-pointer'
+                  className='text-red-700 hover:cursor-pointer'
                   icon={faTrash}
                   onClick={() => handleClickRowDelete(index)}
                 />
