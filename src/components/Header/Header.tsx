@@ -1,5 +1,6 @@
-import { FC, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getVersion } from '@tauri-apps/api/app';
 import {
   faGears,
   faCirclePlus,
@@ -41,14 +42,35 @@ const Header: FC<HeaderProps> = ({
   selectedImages,
   title,
 }) => {
+  const [appVersion, setAppVersion] = useState('0.0.0');
+
+  const getProperAppVersion = useCallback((): string => {
+    if (appVersion[0] === '0') {
+      return `v${appVersion} BETA`;
+    } else {
+      return `v${appVersion}`;
+    }
+  }, [appVersion]);
+
+  useEffect(() => {
+    const getCurrentVersion = async () => {
+      setAppVersion(await getVersion());
+    };
+
+    getCurrentVersion();
+  }, []);
+
   return useMemo(
     () => (
       <div className='sticky top-0 py-4 bg-neutral-50'>
         <div className='flex border p-6 justify-between items-center shadow-lg mb-4 rounded'>
-          <h1 className='flex items-center text-4xl font-bold select-none mb-0 text-neutral-700'>
-            <img className='mr-3' src='/logo.svg' width={50} />
-            {title}
-          </h1>
+          <div className='flex flex-col items-end select-none'>
+            <h1 className='flex items-center text-4xl font-bold mb-0 text-neutral-700'>
+              <img className='mr-3' src='/logo.svg' width={50} />
+              {title}
+            </h1>
+            <p>{getProperAppVersion()}</p>
+          </div>
           <Button
             disabled={!selectedImages?.length || processing}
             onClick={handleClickConvert}
@@ -72,7 +94,7 @@ const Header: FC<HeaderProps> = ({
         </div>
       </div>
     ),
-    [processing, selectedImages],
+    [processing, selectedImages, appVersion],
   );
 };
 
