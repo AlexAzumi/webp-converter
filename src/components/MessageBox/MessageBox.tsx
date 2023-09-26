@@ -4,6 +4,7 @@ import {
   faCircleCheck,
   faCircleExclamation,
   faCircleXmark,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
 interface MessageBoxProps {
@@ -75,6 +76,12 @@ const MessageBox: FC<MessageBoxProps> = ({
         <FontAwesomeIcon className='mr-3' icon={faCircleExclamation} />
       ) : null}
       <p>{message}</p>
+      <FontAwesomeIcon
+        className='absolute -top-4 -left-4 text-neutral-800 hover:cursor-pointer'
+        icon={faCircleXmark}
+        onClick={onDismiss}
+        size='xl'
+      />
     </div>
   );
 };
