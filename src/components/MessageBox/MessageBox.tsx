@@ -79,8 +79,8 @@ const MessageBox: FC<MessageBoxProps> = ({
       <FontAwesomeIcon
         className='absolute -top-4 -left-4 text-neutral-800 hover:cursor-pointer'
         icon={faCircleXmark}
-        onClick={onDismiss}
         size='xl'
+        onClick={onDismiss}
       />
     </div>
   );
