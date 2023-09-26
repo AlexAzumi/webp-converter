@@ -30,3 +30,7 @@
   font-family: Poppins;
   font-weight: 300;
 }
+
+body {
+  overflow-x: hidden;
+}
