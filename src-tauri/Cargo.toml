@@ -1,6 +1,6 @@
 [package]
 name = "webp-converter"
-version = "0.3.2"
+version = "0.3.3"
 description = "Desktop app that lets you convert .jpg or .png images to .web and viceversa"
 authors = ["AlexAzumi"]
 license = ""
