@@ -4,7 +4,6 @@ import {
   faCircleCheck,
   faCircleExclamation,
   faCircleXmark,
-  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
 interface MessageBoxProps {
