@@ -95,7 +95,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                 <select
                   className='border px-2 py-1'
                   value={item.quality}
-                  disabled={processing || item.format != ImageFormat.WEBP}
+                  disabled={processing}
                   onChange={(event) =>
                     handleChangeImageQuality(
                       index,

@@ -140,7 +140,7 @@ const App = () => {
     if (folderToSave && typeof folderToSave === 'string') {
       setProcessing(true);
 
-      invoke('convert_images', {
+      invoke<number>('convert_images', {
         files: selectedImages
           .filter((item) => item.selected)
           .map((item) => ({ ...item, format: ImageFormat[item.format] })),
@@ -153,6 +153,7 @@ const App = () => {
               selectedImages.filter((item) => item.selected).length
             } images`,
             show: true,
+            type: count > 0 ? 'Success' : 'Error',
           });
         })
         .catch(console.error)
