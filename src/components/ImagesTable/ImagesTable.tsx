@@ -65,7 +65,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
             <TableHeader className='w-2/12'>Name</TableHeader>
             <TableHeader className='w-5/12'>Path</TableHeader>
             <TableHeader className='w-1/12'>Quality</TableHeader>
-            <TableHeader className='w-1/12'>Convert to</TableHeader>
+            <TableHeader className='w-1/12'>Format</TableHeader>
             <TableHeader className='w-1/12'>Remove</TableHeader>
           </tr>
         </thead>
@@ -93,7 +93,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
               </TableRow>
               <TableRow className='text-center'>
                 <select
-                  className='border px-2 py-1'
+                  className='border px-2 py-1 rounded'
                   value={item.quality}
                   disabled={processing}
                   onChange={(event) =>
@@ -112,7 +112,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
               </TableRow>
               <TableRow className='text-center'>
                 <select
-                  className='border px-2 py-1'
+                  className='border px-2 py-1 rounded'
                   disabled={processing}
                   value={item.format}
                   onChange={(event) =>

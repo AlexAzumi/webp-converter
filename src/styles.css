@@ -34,3 +34,7 @@
 body {
   overflow-x: hidden;
 }
+
+#root {
+  height: 100vh;
+}

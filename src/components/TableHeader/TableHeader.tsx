@@ -7,7 +7,7 @@ interface TableHeaderProps extends PropsWithChildren {
 const TableHeader: FC<TableHeaderProps> = ({ children, className = '' }) => {
   return (
     <th
-      className={`px-3 py-2 border-2 border-sky-600 bg-sky-600 text-neutral-50 select-none ${className}`}
+      className={`p-3 bg-sky-600 text-neutral-50 select-none first-of-type:rounded-tl last-of-type:rounded-tr ${className}`}
     >
       {children}
     </th>

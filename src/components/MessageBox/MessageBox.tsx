@@ -63,7 +63,7 @@ const MessageBox: FC<MessageBoxProps> = ({
 
   return (
     <div
-      className={`flex fixed bottom-5 right-5 px-6 py-4 items-center text-neutral-50 shadow-lg border z-10 select-none max-w-max ${backgroundColor}`}
+      className={`flex fixed rounded bottom-5 right-5 px-6 py-4 items-center text-neutral-50 shadow-lg border z-10 select-none max-w-max ${backgroundColor}`}
     >
       {type === 'Error' ? (
         <FontAwesomeIcon className='mr-3' icon={faCircleXmark} />

@@ -181,7 +181,7 @@ const App = () => {
       {/* Loader screen */}
       <Loader show={processing} />
       {/* Content */}
-      <div className='px-6 bg-neutral-50'>
+      <div className='flex flex-col h-full px-6 bg-neutral-100'>
         {/* Header */}
         <Header
           handleClickClearQuery={handleClickClearQuery}

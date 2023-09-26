@@ -15,7 +15,7 @@ interface ButtonProps extends PropsWithChildren {
 const Button: FC<ButtonProps> = ({ children, onClick, disabled = false }) => {
   return (
     <button
-      className='flex items-center border-sky-600 bg-sky-600 text-neutral-50 border-2 px-4 py-2 hover:bg-sky-500 hover:border-sky-500 disabled:bg-neutral-500 disabled:text-neutral-50 disabled:border-neutral-500 disabled:hover:cursor-not-allowed select-none'
+      className='flex items-center rounded border-sky-600 bg-sky-600 text-neutral-50 border-2 px-4 py-2 hover:bg-sky-500 hover:border-sky-500 disabled:bg-neutral-500 disabled:text-neutral-50 disabled:border-neutral-500 disabled:hover:cursor-not-allowed select-none'
       disabled={disabled}
       onClick={onClick}
     >
