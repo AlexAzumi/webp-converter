@@ -47,23 +47,33 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
 
   match data.format {
     ImageFormat::JPG => {
-      let new_file = File::create(new_path).unwrap();
+      let new_file = File::create(new_path.clone()).unwrap();
       let ref mut buff = BufWriter::new(new_file);
       let encoder = JpegEncoder::new(buff);
       // Encode image
       match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
         Ok(_) => Ok(()),
-        Err(err) => Err(err.to_string()),
+        Err(err) => {
+          // Delete unprocessed image
+          fs::remove_file(new_path).unwrap();
+
+          return Err(err.to_string());
+        }
       }
     }
     ImageFormat::PNG => {
-      let new_file = File::create(new_path).unwrap();
+      let new_file = File::create(new_path.clone()).unwrap();
       let ref mut buff = BufWriter::new(new_file);
       let encoder = PngEncoder::new(buff);
       // Encode image
       match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
         Ok(_) => Ok(()),
-        Err(err) => Err(err.to_string()),
+        Err(err) => {
+          // Delete unprocessed image
+          fs::remove_file(new_path).unwrap();
+
+          return Err(err.to_string());
+        }
       }
     }
     ImageFormat::WEBP => {

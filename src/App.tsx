@@ -147,13 +147,20 @@ const App = () => {
         folderToSave,
       })
         .then((count) => {
+          const totalToProcess = selectedImages.filter(
+            (item) => item.selected,
+          ).length;
+
           setMessageBoxData({
             ...messageBoxData,
-            message: `Processed ${count} of ${
-              selectedImages.filter((item) => item.selected).length
-            } images`,
+            message: `Processed ${count} of ${totalToProcess} images`,
             show: true,
-            type: count > 0 ? 'Success' : 'Error',
+            type:
+              count === totalToProcess
+                ? 'Sucesss'
+                : count > 0
+                ? 'Warning'
+                : 'Error',
           });
         })
         .catch(console.error)

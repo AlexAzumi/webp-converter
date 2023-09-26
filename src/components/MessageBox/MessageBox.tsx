@@ -1,7 +1,8 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleCheck,
+  faCircleExclamation,
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -33,8 +34,25 @@ const MessageBox: FC<MessageBoxProps> = ({
   show,
   type,
 }) => {
+  const [backgroundColor, setBackgroundColor] = useState('bg-sky-600');
+
   useEffect(() => {
     if (show) {
+      switch (type) {
+        case 'Success':
+          setBackgroundColor('bg-sky-600');
+          break;
+        case 'Error':
+          setBackgroundColor('bg-red-600');
+          break;
+        case 'Warning':
+          setBackgroundColor('bg-yellow-600');
+          break;
+        default:
+          setBackgroundColor('bg-sky-600');
+          break;
+      }
+
       setTimeout(() => onDismiss(), duration * 1000);
     }
   }, [show]);
@@ -44,12 +62,17 @@ const MessageBox: FC<MessageBoxProps> = ({
   }
 
   return (
-    <div className='flex fixed bottom-5 right-5 px-6 py-4 items-center bg-sky-600 text-neutral-50 shadow-lg border z-10 select-none max-w-max'>
+    <div
+      className={`flex fixed bottom-5 right-5 px-6 py-4 items-center text-neutral-50 shadow-lg border z-10 select-none max-w-max ${backgroundColor}`}
+    >
       {type === 'Error' ? (
         <FontAwesomeIcon className='mr-3' icon={faCircleXmark} />
       ) : null}
       {type === 'Success' ? (
         <FontAwesomeIcon className='mr-3' icon={faCircleCheck} />
+      ) : null}
+      {type === 'Warning' ? (
+        <FontAwesomeIcon className='mr-3' icon={faCircleExclamation} />
       ) : null}
       <p>{message}</p>
     </div>
