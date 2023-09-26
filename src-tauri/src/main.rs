@@ -26,14 +26,21 @@ async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
 
   for file in files {
     let data = file.clone();
-    let img = image::open(file.src).unwrap();
+    let img = image::open(file.src);
 
-    match encode_image(data, &img, folder_to_save) {
-      Ok(_) => {
-        converted_files += 1;
+    match img {
+      Ok(_img) => {
+        match encode_image(data, &_img, folder_to_save) {
+          Ok(_) => {
+            converted_files += 1;
+          }
+          Err(err) => {
+            println!("Error while processing the image {}: {}", file.name, err);
+          }
+        }
       }
       Err(err) => {
-        println!("Error while processing the image {}: {}", file.name, err);
+        println!("Error while loading the image {}: {}", data.name, err);
       }
     }
   }
