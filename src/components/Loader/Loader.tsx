@@ -15,17 +15,15 @@ const Loader: FC<LoaderProps> = ({ show }) => {
   }
 
   return (
-    <div className='fixed top-0 left-0 right-0 bottom-0 bg-neutral-800 z-10 bg-opacity-70'>
-      <div className='flex flex-col fixed right-0 bottom-0 left-0 top-0 justify-center items-center'>
+    <div className='flex fixed top-0 left-0 right-0 bottom-0 z-10 items-end justify-start'>
+      <div className='flex bg-neutral-50 px-6 py-4 shadow-lg text-neutral-800 border items-center ml-4 mb-4'>
         <FontAwesomeIcon
-          className='text-neutral-50 mb-2'
+          className='mr-4'
           icon={faSpinner}
-          size='4x'
+          size='2x'
           spinPulse
         />
-        <p className='text-neutral-50 text-xl select-none'>
-          Processing images...
-        </p>
+        <p className='text-xl select-none'>Processing images...</p>
       </div>
     </div>
   );
