@@ -100,20 +100,8 @@ const App = () => {
         const splittedPath = item.split('\\');
         const name = splittedPath[splittedPath.length - 1];
 
-        let format: ImageFormat;
-
-        if (
-          name.toLocaleLowerCase().endsWith('.jpg') ||
-          name.toLocaleLowerCase().endsWith('.png') ||
-          name.toLocaleLowerCase().endsWith('.jpeg')
-        ) {
-          format = ImageFormat.WEBP;
-        } else {
-          format = ImageFormat.PNG;
-        }
-
         return {
-          format,
+          format: ImageFormat.WEBP,
           name,
           quality: 100,
           selected: true,
