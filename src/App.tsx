@@ -169,7 +169,7 @@ const App = () => {
       {/* Loader screen */}
       <Loader show={processing} />
       {/* Content */}
-      <div className='flex flex-col h-full px-6 bg-neutral-100'>
+      <div className='flex flex-col h-full overflow-y-auto px-6 bg-neutral-200'>
         {/* Header */}
         <Header
           handleClickClearQuery={handleClickClearQuery}

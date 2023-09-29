@@ -37,4 +37,32 @@ body {
 
 #root {
   height: 100vh;
+  overflow: hidden;
+}
+
+input[type='checkbox'] {
+  display: grid;
+  place-content: center;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 100%;
+  border: 2px solid currentColor;
+}
+
+input[type='checkbox']::before {
+  border-radius: 100%;
+  box-shadow: inset 1em 1em currentColor;
+  content: '';
+  height: 0.5rem;
+  transform: scale(0);
+  width: 0.5rem;
+}
+
+input[type='checkbox']:checked::before {
+  transform: scale(1);
+}
+
+input[type='checkbox']:hover {
+  cursor: pointer;
 }

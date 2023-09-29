@@ -54,13 +54,16 @@ const ImagesTable: FC<ImagesTableProps> = ({
         <thead>
           <tr className='mb-2'>
             <TableHeader className='text-center w-1/12'>
-              <input
-                type='checkbox'
-                checked={checkIfSelectedAll()}
-                onChange={(event) =>
-                  handleClickColCheckbox(event.currentTarget.checked)
-                }
-              />
+              <div className='flex justify-center items-center'>
+                <input
+                  disabled={processing}
+                  type='checkbox'
+                  checked={checkIfSelectedAll()}
+                  onChange={(event) =>
+                    handleClickColCheckbox(event.currentTarget.checked)
+                  }
+                />
+              </div>
             </TableHeader>
             <TableHeader className='w-2/12'>Name</TableHeader>
             <TableHeader className='w-5/12'>Path</TableHeader>
@@ -73,11 +76,14 @@ const ImagesTable: FC<ImagesTableProps> = ({
           {selectedImages.map((item, index) => (
             <tr key={item.name} className='mb-2 last-of-type:mb-0'>
               <TableRow className='text-center'>
-                <input
-                  type='checkbox'
-                  checked={item.selected}
-                  onChange={() => handleClickRowCheckbox(index)}
-                />
+                <div className='flex justify-center items-center'>
+                  <input
+                    checked={item.selected}
+                    disabled={processing}
+                    onChange={() => handleClickRowCheckbox(index)}
+                    type='checkbox'
+                  />
+                </div>
               </TableRow>
               <TableRow
                 className='whitespace-nowrap overflow-hidden text-ellipsis'

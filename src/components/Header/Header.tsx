@@ -62,8 +62,8 @@ const Header: FC<HeaderProps> = ({
 
   return useMemo(
     () => (
-      <div className='sticky top-0 py-4 bg-neutral-100'>
-        <div className='flex border p-6 justify-between items-center shadow-lg mb-4 rounded'>
+      <div className='sticky top-0 py-4 bg-neutral-200 z-10'>
+        <div className='flex border p-6 justify-between items-center shadow-lg mb-4 rounded bg-neutral-50'>
           <div className='flex flex-col items-end select-none'>
             <h1 className='flex items-center text-4xl font-bold mb-0 text-neutral-700'>
               <img className='mr-3' src='/logo.svg' width={50} />
