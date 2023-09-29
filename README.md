@@ -5,7 +5,7 @@
 
 Multi-platform desktop app that lets you convert `.webp` images to `.jpg` or `.png`, and viceversa!
 
-![image](https://github.com/AlexAzumi/webp-converter/assets/20672555/822e7195-7dba-4d15-836b-ca74faa40538)
+![image](https://github.com/AlexAzumi/webp-converter/assets/20672555/d23cb52a-c044-420d-9afe-1c0e6614e1d5)
 
 # Installation
 
