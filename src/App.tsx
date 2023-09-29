@@ -1,18 +1,21 @@
 import { useCallback, useState } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { open } from '@tauri-apps/api/dialog';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 import { Image, ImageFormat } from './interfaces/Image';
 
 import { MessageBox } from './components/MessageBox';
 import { Loader } from './components/Loader';
 import { Header } from './components/Header';
-
+import { AboutModal } from './components/AboutModal';
 import { ImagesTable } from './components/ImagesTable';
 
 const App = () => {
   const [selectedImages, setSelectedImages] = useState<Image[]>([]);
   const [processing, setProcessing] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [messageBoxData, setMessageBoxData] = useState({
     message: '',
     show: false,
@@ -158,6 +161,8 @@ const App = () => {
 
   return (
     <>
+      {/* About this app */}
+      <AboutModal visible={showAbout} onDismiss={() => setShowAbout(false)} />
       {/* Message box */}
       <MessageBox
         duration={messageBoxData.duration}
@@ -168,6 +173,16 @@ const App = () => {
       />
       {/* Loader screen */}
       <Loader show={processing} />
+      {/* Menu bar */}
+      <div className='flex select-none bg-sky-600 px-2 py-1'>
+        <div
+          className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded hover:cursor-pointer hover:bg-sky-700'
+          onClick={() => setShowAbout(true)}
+        >
+          <FontAwesomeIcon className='mr-2' icon={faCircleInfo} />
+          About
+        </div>
+      </div>
       {/* Content */}
       <div className='flex flex-col h-full overflow-y-auto px-6 bg-neutral-200'>
         {/* Header */}
