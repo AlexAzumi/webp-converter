@@ -29,4 +29,6 @@ export enum ImageFormat {
   WEBP,
   JPG,
   PNG,
+  TIFF,
+  BMP,
 }

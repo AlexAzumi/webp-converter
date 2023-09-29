@@ -89,7 +89,7 @@ const App = () => {
       filters: [
         {
           name: 'Image',
-          extensions: ['png', 'jpeg', 'jpg', 'webp'],
+          extensions: ['png', 'jpeg', 'jpg', 'tiff', 'bmp', 'webp'],
         },
       ],
       title: 'Select files to add to the query',
