@@ -176,7 +176,7 @@ const App = () => {
       {/* Menu bar */}
       <div className='flex select-none bg-sky-600 px-2 py-1'>
         <div
-          className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded hover:cursor-pointer hover:bg-sky-700'
+          className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded-full hover:cursor-pointer hover:bg-sky-700'
           onClick={() => setShowAbout(true)}
         >
           <FontAwesomeIcon className='mr-2' icon={faCircleInfo} />
