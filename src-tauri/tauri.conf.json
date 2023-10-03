@@ -53,7 +53,8 @@
         "installerArgs": []
       },
       "endpoints": [
-        "https://gist.githubusercontent.com/AlexAzumi/02f170292951b4da7bd2bc46466319ab/raw"
+        "https://gist.githubusercontent.com/AlexAzumi/02f170292951b4da7bd2bc46466319ab/raw",
+        "https://github.com/AlexAzumi/webp-converter/releases/latest/download/latest.json"
       ]
     },
     "security": {
