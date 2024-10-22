@@ -22,6 +22,7 @@ const App = () => {
     duration: 6,
     type: 'Success',
   });
+  const [batchQuality, setBatchQuality] = useState(0);
 
   const handleClickRowCheckbox = useCallback(
     (index: number) => {
@@ -134,7 +135,11 @@ const App = () => {
       invoke<number>('convert_images', {
         files: selectedImages
           .filter((item) => item.selected)
-          .map((item) => ({ ...item, format: ImageFormat[item.format] })),
+          .map((item) => ({
+            ...item,
+            format: ImageFormat[item.format],
+            quality: batchQuality > 0 ? batchQuality : item.quality,
+          })),
         folderToSave,
       })
         .then((count) => {
@@ -157,7 +162,15 @@ const App = () => {
         .catch(console.error)
         .then(() => setProcessing(false));
     }
-  }, [selectedImages]);
+  }, [selectedImages, batchQuality]);
+
+  const handleBatchQuality = useCallback(
+    (newValue: number) => {
+      console.log(newValue);
+      setBatchQuality(newValue);
+    },
+    [batchQuality],
+  );
 
   return (
     <>
@@ -187,6 +200,8 @@ const App = () => {
       <div className='flex flex-col h-full overflow-y-auto px-6 bg-neutral-200'>
         {/* Header */}
         <Header
+          batchQuality={batchQuality}
+          handleChangeBatchQuality={handleBatchQuality}
           handleClickClearQuery={handleClickClearQuery}
           handleClickConvert={handleClickConvert}
           handleClickOpen={handleClickOpen}
@@ -196,6 +211,7 @@ const App = () => {
         />
         {/* Table */}
         <ImagesTable
+          batchQuality={batchQuality}
           handleChangeImageFormat={handleChangeImageFormat}
           handleChangeImageQuality={handleChangeImageQuality}
           handleClickColCheckbox={handleClickColCheckbox}

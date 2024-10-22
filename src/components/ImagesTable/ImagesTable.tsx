@@ -20,6 +20,11 @@ interface ImagesTableProps {
    */
   processing: boolean;
 
+  /**
+   * Current value of the quality override of the batch
+   */
+  batchQuality: number;
+
   handleClickColCheckbox(checked: boolean): void;
 
   handleClickRowCheckbox(index: number): void;
@@ -32,6 +37,7 @@ interface ImagesTableProps {
 }
 
 const ImagesTable: FC<ImagesTableProps> = ({
+  batchQuality,
   handleChangeImageFormat,
   handleChangeImageQuality,
   handleClickColCheckbox,
@@ -101,7 +107,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                 <select
                   className='border px-2 py-1 rounded'
                   value={item.quality}
-                  disabled={processing}
+                  disabled={processing || batchQuality > 0}
                   onChange={(event) =>
                     handleChangeImageQuality(
                       index,
@@ -149,7 +155,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
         </tbody>
       </table>
     ),
-    [selectedImages, processing],
+    [selectedImages, processing, batchQuality],
   );
 };
 
