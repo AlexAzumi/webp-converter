@@ -10,6 +10,7 @@ import {
 import { Image } from '../../interfaces/Image';
 
 import { Button } from '../Button';
+import { Select } from '../Select';
 
 interface HeaderProps {
   /**
@@ -27,14 +28,23 @@ interface HeaderProps {
    */
   selectedImages: Image[];
 
+  /**
+   * Current value of the quality override of the batch
+   */
+  batchQuality: number;
+
   handleClickOpen(): void;
 
   handleClickClearQuery(): void;
 
   handleClickConvert(): void;
+
+  handleChangeBatchQuality(newValue: number): void;
 }
 
 const Header: FC<HeaderProps> = ({
+  batchQuality,
+  handleChangeBatchQuality,
   handleClickClearQuery,
   handleClickConvert,
   handleClickOpen,
@@ -79,8 +89,12 @@ const Header: FC<HeaderProps> = ({
             Convert selected images
           </Button>
         </div>
-        <div className='flex space-x-4'>
-          <Button onClick={handleClickOpen} disabled={processing}>
+        <div className='flex'>
+          <Button
+            className='mr-4'
+            onClick={handleClickOpen}
+            disabled={processing}
+          >
             <FontAwesomeIcon className='mr-2' icon={faCirclePlus} />
             Add images
           </Button>
@@ -91,10 +105,17 @@ const Header: FC<HeaderProps> = ({
             <FontAwesomeIcon className='mr-2' icon={faCircleMinus} />
             Clear query
           </Button>
+          <div className='flex items-center ml-auto'>
+            <p className='pr-4'>Batch quality</p>
+            <Select
+              value={batchQuality}
+              handleChangeValue={handleChangeBatchQuality}
+            />
+          </div>
         </div>
       </div>
     ),
-    [processing, selectedImages, appVersion],
+    [processing, selectedImages, appVersion, batchQuality],
   );
 };
 
