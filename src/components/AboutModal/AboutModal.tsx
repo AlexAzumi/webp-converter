@@ -58,7 +58,7 @@ const AboutModal: FC<AboutModalProps> = ({ visible, onDismiss }) => {
             <div className='flex flex-col justify-between flex-1 text-right'>
               <p>Alejandro Suárez (AlexAzumi)</p>
               <p
-                className='text-sky-600 hover:cursor-pointer'
+                className='text-sky-600 hover:cursor-pointer hover:underline'
                 onClick={() => openExternalURL('https://github.com/AlexAzumi')}
               >
                 https://github.com/AlexAzumi
@@ -73,7 +73,7 @@ const AboutModal: FC<AboutModalProps> = ({ visible, onDismiss }) => {
         <div className='flex flex-col border-b-2 pb-4 mb-4'>
           <h1 className='text-xl mb-3 font-bold'>Open source code</h1>
           <p
-            className='text-sky-600 hover:cursor-pointer'
+            className='text-sky-600 hover:cursor-pointer hover:underline'
             onClick={() =>
               openExternalURL('https://github.com/AlexAzumi/webp-converter')
             }

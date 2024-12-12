@@ -52,7 +52,7 @@ const TableRow: FC<TableRowProps> = ({
         setTooltipData({
           show: true,
         });
-      }, 500); // TODO: Set the time as a prop?
+      }, 250); // TODO: Set the time as a prop?
     },
     [children],
   );
@@ -120,7 +120,7 @@ const RowTooltip: FC<RowTooltipProps> = ({
 
   return (
     <div
-      className='flex absolute top-0 bg-neutral-50 px-4 py-2 shadow pointer-events-none text-neutral-700 rounded'
+      className='flex absolute top-0 bg-neutral-50 px-4 py-2 shadow pointer-events-none text-neutral-700 rounded-lg'
       style={{
         left: positionX + offset.x,
         top: positionY + offset.y,
