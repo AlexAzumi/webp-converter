@@ -1,0 +1,16 @@
+{
+  "identifier": "migrated",
+  "description": "permissions that were migrated from v1",
+  "local": true,
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "shell:allow-open",
+    "dialog:allow-open",
+    "core:app:allow-app-show",
+    "core:app:allow-app-hide",
+    "dialog:default"
+  ]
+}

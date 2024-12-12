@@ -2,52 +2,33 @@
   "build": {
     "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": "yarn build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "WebP Converter",
-    "version": "1.1.0"
+  "bundle": {
+    "active": true,
+    "targets": [
+      "app",
+      "appimage",
+      "deb",
+      "msi"
+    ],
+    "publisher": "Alejandro Suárez (AlexAzumi)",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "createUpdaterArtifacts": "v1Compatible"
   },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": false,
-        "open": true
-      },
-      "dialog": {
-        "all": false,
-        "ask": false,
-        "confirm": false,
-        "message": false,
-        "open": true,
-        "save": false
-      },
-      "app": {
-        "all": true,
-        "hide": false,
-        "show": false
-      }
-    },
-    "bundle": {
-      "active": true,
-      "targets": ["app", "appimage", "deb", "msi", "updater"],
-      "identifier": "com.azumi.dev",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "publisher": "Alejandro Suárez (AlexAzumi)"
-    },
+  "productName": "WebP Converter",
+  "mainBinaryName": "WebP Converter",
+  "version": "1.1.0",
+  "identifier": "com.azumi.dev",
+  "plugins": {
     "updater": {
-      "active": true,
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDg0RUMyRjI0NDJCNEQ0NUUKUldSZTFMUkNKQy9zaEdJVHpCWEd0Y0szRjBFcFVFUytncHpOWVVUenBGaGs3ekZPOWpxNndONGkK",
       "windows": {
         "installMode": "passive",
         "installerArgs": []
@@ -55,8 +36,12 @@
       "endpoints": [
         "https://gist.githubusercontent.com/AlexAzumi/02f170292951b4da7bd2bc46466319ab/raw",
         "https://github.com/AlexAzumi/webp-converter/releases/latest/download/latest.json"
-      ]
-    },
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDg0RUMyRjI0NDJCNEQ0NUUKUldSZTFMUkNKQy9zaEdJVHpCWEd0Y0szRjBFcFVFUytncHpOWVVUenBGaGs3ekZPOWpxNndONGkK"
+    }
+  },
+  "app": {
+    "withGlobalTauri": false,
     "security": {
       "csp": null
     },
@@ -67,7 +52,8 @@
         "title": "WebP Converter",
         "width": 1280,
         "height": 720,
-        "center": true
+        "center": true,
+        "useHttpsScheme": true
       }
     ]
   }
