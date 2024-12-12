@@ -22,19 +22,7 @@
   "mainBinaryName": "WebP Converter",
   "version": "1.1.1",
   "identifier": "com.azumi.dev",
-  "plugins": {
-    "updater": {
-      "windows": {
-        "installMode": "passive",
-        "installerArgs": []
-      },
-      "endpoints": [
-        "https://gist.githubusercontent.com/AlexAzumi/02f170292951b4da7bd2bc46466319ab/raw",
-        "https://github.com/AlexAzumi/webp-converter/releases/latest/download/latest.json"
-      ],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDg0RUMyRjI0NDJCNEQ0NUUKUldSZTFMUkNKQy9zaEdJVHpCWEd0Y0szRjBFcFVFUytncHpOWVVUenBGaGs3ekZPOWpxNndONGkK"
-    }
-  },
+  "plugins": {},
   "app": {
     "withGlobalTauri": false,
     "security": {
