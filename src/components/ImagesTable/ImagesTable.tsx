@@ -78,9 +78,9 @@ const ImagesTable: FC<ImagesTableProps> = ({
             <TableHeader className='w-1/12'>Remove</TableHeader>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='last-'>
           {selectedImages.map((item, index) => (
-            <tr key={item.name} className='mb-2 last-of-type:mb-0'>
+            <tr key={item.name} className='mb-2'>
               <TableRow className='text-center'>
                 <div className='flex justify-center items-center'>
                   <input
