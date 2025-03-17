@@ -160,7 +160,6 @@ async fn convert_images(files: Vec<Image>, folder_to_save: String) -> i8 {
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![convert_images])
         .run(tauri::generate_context!())
