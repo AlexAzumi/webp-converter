@@ -15,8 +15,8 @@ const Loader: FC<LoaderProps> = ({ show }) => {
   }
 
   return (
-    <div className='flex fixed top-0 left-0 right-0 bottom-0 z-10 items-end justify-start'>
-      <div className='flex bg-neutral-50 px-6 py-4 shadow-lg text-neutral-800 border items-center ml-4 mb-4 rounded'>
+    <div className='flex fixed top-0 left-0 right-0 bottom-0 z-10 items-end justify-end'>
+      <div className='flex bg-neutral-50 px-6 py-4 shadow-lg text-neutral-800 border items-center mr-4 mb-4 rounded'>
         <FontAwesomeIcon
           className='mr-4'
           icon={faSpinner}
