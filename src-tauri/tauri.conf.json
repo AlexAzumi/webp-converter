@@ -15,8 +15,7 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ],
-    "createUpdaterArtifacts": "v1Compatible"
+    ]
   },
   "productName": "WebP Converter",
   "mainBinaryName": "WebP Converter",
