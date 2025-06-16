@@ -1,16 +1,18 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  faCircleMinus,
+  faCirclePlus,
+  faGears,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getVersion } from '@tauri-apps/api/app';
-import {
-  faGears,
-  faCirclePlus,
-  faCircleMinus,
-} from '@fortawesome/free-solid-svg-icons';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Image } from '../../interfaces/Image';
+import { Image, ImageFormat } from '../../interfaces/Image';
 
 import { Button } from '../Button';
 import { Select } from '../Select';
+
+import config from '../../config.app.json';
 
 interface HeaderProps {
   /**
@@ -33,6 +35,11 @@ interface HeaderProps {
    */
   batchQuality: number;
 
+  /**
+   * Current value of the format override of the batch
+   */
+  batchFormat: number;
+
   handleClickOpen(): void;
 
   handleClickClearQuery(): void;
@@ -40,10 +47,14 @@ interface HeaderProps {
   handleClickConvert(): void;
 
   handleChangeBatchQuality(newValue: number): void;
+
+  handleChangeBatchFormat(newValue: number): void;
 }
 
 const Header: FC<HeaderProps> = ({
+  batchFormat,
   batchQuality,
+  handleChangeBatchFormat,
   handleChangeBatchQuality,
   handleClickClearQuery,
   handleClickConvert,
@@ -108,14 +119,28 @@ const Header: FC<HeaderProps> = ({
           <div className='flex items-center ml-auto'>
             <p className='pr-4'>Batch quality</p>
             <Select
+              options={config.qualityOptions.map((item) => ({
+                title: item.toString(),
+                value: item,
+              }))}
               value={batchQuality}
               handleChangeValue={handleChangeBatchQuality}
+            />
+          </div>
+          <div className='flex items-center ml-4'>
+            <p className='pr-4'>Batch format</p>
+            <Select
+              options={Object.keys(ImageFormat)
+                .filter((item) => isNaN(Number(item)))
+                .map((item, idx) => ({ title: item, value: idx + 1 }))}
+              value={batchFormat}
+              handleChangeValue={handleChangeBatchFormat}
             />
           </div>
         </div>
       </div>
     ),
-    [processing, selectedImages, appVersion, batchQuality],
+    [processing, selectedImages, appVersion, batchQuality, batchFormat],
   );
 };
 

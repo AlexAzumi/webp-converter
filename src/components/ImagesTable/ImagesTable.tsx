@@ -25,6 +25,11 @@ interface ImagesTableProps {
    */
   batchQuality: number;
 
+  /**
+   * Current value of the format override of the batch
+   */
+  batchFormat: number;
+
   handleClickColCheckbox(checked: boolean): void;
 
   handleClickRowCheckbox(index: number): void;
@@ -38,6 +43,7 @@ interface ImagesTableProps {
 
 const ImagesTable: FC<ImagesTableProps> = ({
   batchQuality,
+  batchFormat,
   handleChangeImageFormat,
   handleChangeImageQuality,
   handleClickColCheckbox,
@@ -129,7 +135,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   <TableRow className='text-center w-1/12'>
                     <select
                       className='border px-2 py-1 rounded'
-                      disabled={processing}
+                      disabled={processing || batchFormat > 0}
                       value={item.format}
                       onChange={(event) =>
                         handleChangeImageFormat(
@@ -161,7 +167,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
         </div>
       </>
     ),
-    [selectedImages, processing, batchQuality],
+    [selectedImages, processing, batchQuality, batchFormat],
   );
 };
 

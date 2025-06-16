@@ -25,6 +25,7 @@ const App = () => {
     type: 'Success',
   });
   const [batchQuality, setBatchQuality] = useState(0);
+  const [batchFormat, setBatchFormat] = useState(0);
   const [showDropOverlay, setShowDropOverlay] = useState(false);
 
   const handleClickRowCheckbox = useCallback(
@@ -120,7 +121,8 @@ const App = () => {
           .filter((item) => item.selected)
           .map((item) => ({
             ...item,
-            format: ImageFormat[item.format],
+            format:
+              batchFormat > 0 ? batchFormat - 1 : ImageFormat[item.format],
             quality: batchQuality > 0 ? batchQuality : item.quality,
           })),
         folderToSave,
@@ -145,38 +147,48 @@ const App = () => {
         .catch(console.error)
         .then(() => setProcessing(false));
     }
-  }, [selectedImages, batchQuality]);
+  }, [selectedImages, batchQuality, batchFormat]);
 
-  const handleBatchQuality = useCallback(
+  const handleChangeBatchQuality = useCallback(
     (newValue: number) => {
       setBatchQuality(newValue);
     },
     [batchQuality],
   );
 
-  const processFiles = (selectedFiles: string[] | null) => {
-    if (selectedFiles && typeof selectedFiles === 'object') {
-      const mappedImages = selectedFiles.map((item) => {
-        const splittedPath = item.split('\\');
-        const name = splittedPath[splittedPath.length - 1];
+  const handleChangeBatchFormat = useCallback(
+    (newValue: number) => {
+      setBatchFormat(newValue);
+    },
+    [batchFormat],
+  );
 
-        return {
-          format: ImageFormat.WEBP,
-          name,
-          quality: 100,
-          selected: true,
-          src: item,
-        };
-      });
+  const processFiles = useCallback(
+    (selectedFiles: string[] | null) => {
+      if (selectedFiles && typeof selectedFiles === 'object') {
+        const mappedImages = selectedFiles.map((item) => {
+          const splittedPath = item.split('\\');
+          const name = splittedPath[splittedPath.length - 1];
 
-      const imageSrc = new Set(selectedImages.map((item) => item.src));
+          return {
+            format: ImageFormat.WEBP,
+            name,
+            quality: 100,
+            selected: true,
+            src: item,
+          };
+        });
 
-      setSelectedImages([
-        ...selectedImages,
-        ...mappedImages.filter((item) => !imageSrc.has(item.src)),
-      ]);
-    }
-  };
+        const imageSrc = new Set(selectedImages.map((item) => item.src));
+
+        setSelectedImages([
+          ...selectedImages,
+          ...mappedImages.filter((item) => !imageSrc.has(item.src)),
+        ]);
+      }
+    },
+    [selectedImages],
+  );
 
   return (
     <DropZoneWrapper
@@ -213,8 +225,10 @@ const App = () => {
       <div className='flex flex-col w-screen h-screen overflow-y-hidden px-6 bg-neutral-200'>
         {/* Header */}
         <Header
+          batchFormat={batchFormat}
           batchQuality={batchQuality}
-          handleChangeBatchQuality={handleBatchQuality}
+          handleChangeBatchFormat={handleChangeBatchFormat}
+          handleChangeBatchQuality={handleChangeBatchQuality}
           handleClickClearQuery={handleClickClearQuery}
           handleClickConvert={handleClickConvert}
           handleClickOpen={handleClickOpen}
@@ -224,6 +238,7 @@ const App = () => {
         />
         {/* Table */}
         <ImagesTable
+          batchFormat={batchFormat}
           batchQuality={batchQuality}
           handleChangeImageFormat={handleChangeImageFormat}
           handleChangeImageQuality={handleChangeImageQuality}

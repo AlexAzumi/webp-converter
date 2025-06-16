@@ -1,8 +1,14 @@
 import { FC } from 'react';
 
-import appConfig from '../../config.app.json';
-
 interface SelectProps {
+  /**
+   * Options that will be shown in the select input
+   */
+  options: {
+    title: string;
+    value: number;
+  }[];
+
   /**
    * Current selected value
    */
@@ -11,17 +17,17 @@ interface SelectProps {
   handleChangeValue(newValue: number): void;
 }
 
-const Select: FC<SelectProps> = ({ value, handleChangeValue }) => {
+const Select: FC<SelectProps> = ({ options, value, handleChangeValue }) => {
   return (
     <select
-      className='rounded-full px-4 py-2'
+      className='rounded-full px-4 py-2 border-2 border-white hover:border-sky-600 transition-colors'
       onChange={(event) => handleChangeValue(parseInt(event.target.value))}
       value={value}
     >
       <option value={0}>Per image</option>
-      {appConfig.qualityOptions.map((quality) => (
-        <option key={`quality-${quality}`} value={quality}>
-          {quality}
+      {options.map((item, idx) => (
+        <option key={`option-${idx}`} value={item.value}>
+          {item.title}
         </option>
       ))}
     </select>
