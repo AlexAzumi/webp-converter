@@ -1,6 +1,8 @@
 import { UnlistenFn } from '@tauri-apps/api/event';
 import { getCurrentWebview } from '@tauri-apps/api/webview';
-import { FC, PropsWithChildren, useEffect, useRef } from 'react';
+import { FC, PropsWithChildren, useCallback, useEffect, useRef } from 'react';
+
+import { ImageFormat } from '../../interfaces/Image';
 
 interface DropZoneWrapperProps extends PropsWithChildren {
   /**
@@ -15,6 +17,10 @@ interface DropZoneWrapperProps extends PropsWithChildren {
   onDrop(files: string[]): void;
 }
 
+const extensions = Object.keys(ImageFormat).filter((item) =>
+  isNaN(Number(item)),
+);
+
 const DropZoneWrapper: FC<DropZoneWrapperProps> = ({
   visibleOverlay,
   onEnter,
@@ -23,6 +29,19 @@ const DropZoneWrapper: FC<DropZoneWrapperProps> = ({
   children,
 }) => {
   const unlistenRef = useRef<UnlistenFn | null>(null);
+
+  const filterItems = useCallback((path: string[]) => {
+    return path.filter((item) => {
+      const spplitedPath = item.split('.');
+      const extension = spplitedPath[spplitedPath.length - 1];
+
+      if (extensions.includes(extension.toUpperCase())) {
+        return true;
+      }
+
+      return false;
+    });
+  }, []);
 
   useEffect(() => {
     const setDragDropEvents = async () => {
@@ -34,7 +53,7 @@ const DropZoneWrapper: FC<DropZoneWrapperProps> = ({
             }
           } else if (event.payload.type === 'drop') {
             // TODO: Filter folder and files that are not compatible
-            onDrop(event.payload.paths);
+            onDrop(filterItems(event.payload.paths));
 
             onExit();
           } else {
