@@ -25,7 +25,7 @@ const Button: FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={`flex items-center rounded-full border-sky-600 bg-sky-600 text-neutral-50 border-2 px-4 py-2 transition-all hover:bg-sky-500 hover:border-sky-500 disabled:bg-neutral-500 disabled:text-neutral-50 disabled:border-neutral-500 disabled:hover:cursor-not-allowed select-none ${className}`}
+      className={`flex items-center rounded-full border-sky-600 bg-sky-600 text-neutral-50 border-2 px-4 py-2 hover:bg-sky-500 hover:border-sky-500 disabled:bg-neutral-500 disabled:text-neutral-50 disabled:border-neutral-500 disabled:hover:cursor-not-allowed select-none ${className}`}
       disabled={disabled}
       onClick={onClick}
     >

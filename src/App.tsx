@@ -1,20 +1,24 @@
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
-import { useCallback, useState } from 'react';
-
-import { type Image, ImageFormat } from './interfaces/Image';
+import { useCallback, useEffect, useState } from 'react';
+import { LazyStore } from '@tauri-apps/plugin-store';
 
 import { AboutModal } from './components/AboutModal';
 import { DropZoneOverlay } from './components/DropZoneOverlay';
+import { DropZoneWrapper } from './components/DropZoneWrapper';
 import { Header } from './components/Header';
 import { ImagesTable } from './components/ImagesTable';
 import { Loader } from './components/Loader';
 import { MessageBox } from './components/MessageBox';
-import { DropZoneWrapper } from './components/DropZoneWrapper';
+import { ThemeProvider } from './components/ThemeProvider';
+
+import { type Image, ImageFormat } from './interfaces/Image';
 
 const App = () => {
+  const store = new LazyStore('settings.json', { autoSave: true });
+
   const [selectedImages, setSelectedImages] = useState<Image[]>([]);
   const [processing, setProcessing] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
@@ -27,6 +31,22 @@ const App = () => {
   const [batchQuality, setBatchQuality] = useState(0);
   const [batchFormat, setBatchFormat] = useState(0);
   const [showDropOverlay, setShowDropOverlay] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const getThemeConfig = async () => {
+      const lastTheme = await store.get<'light' | 'dark'>('theme');
+      const lastBatchQuality = await store.get<number>('batchQuality');
+      const lastBatchFormat = await store.get<number>('batchFormat');
+
+      // Update in app
+      if (lastTheme) setCurrentTheme(lastTheme);
+      if (lastBatchQuality) setBatchQuality(lastBatchQuality);
+      if (lastBatchFormat) setBatchFormat(lastBatchFormat);
+    };
+
+    getThemeConfig();
+  }, []);
 
   const handleClickRowCheckbox = useCallback(
     (index: number) => {
@@ -152,15 +172,21 @@ const App = () => {
   }, [selectedImages, batchQuality, batchFormat]);
 
   const handleChangeBatchQuality = useCallback(
-    (newValue: number) => {
+    async (newValue: number) => {
       setBatchQuality(newValue);
+
+      // Save in store
+      await store.set('batchQuality', newValue);
     },
     [batchQuality],
   );
 
   const handleChangeBatchFormat = useCallback(
-    (newValue: number) => {
+    async (newValue: number) => {
       setBatchFormat(newValue);
+
+      // Save in store
+      await store.set('batchFormat', newValue);
     },
     [batchFormat],
   );
@@ -192,66 +218,89 @@ const App = () => {
     [selectedImages],
   );
 
+  const toggleTheme = useCallback(async () => {
+    const theme = currentTheme === 'light' ? 'dark' : 'light';
+
+    setCurrentTheme(theme);
+
+    // Save in store
+    await store.set('theme', theme);
+  }, [currentTheme, store]);
+
   return (
-    <DropZoneWrapper
-      onEnter={() => setShowDropOverlay(true)}
-      onExit={() => setShowDropOverlay(false)}
-      onDrop={processFiles}
-      visibleOverlay={showDropOverlay}
-    >
-      {/* Drop file zone */}
-      <DropZoneOverlay show={showDropOverlay} />
-      {/* About this app */}
-      <AboutModal visible={showAbout} onDismiss={() => setShowAbout(false)} />
-      {/* Message box */}
-      <MessageBox
-        duration={messageBoxData.duration}
-        message={messageBoxData.message}
-        onDismiss={() => setMessageBoxData({ ...messageBoxData, show: false })}
-        show={messageBoxData.show}
-        type={messageBoxData.type}
-      />
-      {/* Loader screen */}
-      <Loader show={processing} />
-      {/* Menu bar */}
-      <div className='flex select-none bg-sky-600 px-2 py-1'>
-        <div
-          className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded-full hover:cursor-pointer hover:bg-sky-700 transition-all'
-          onClick={() => setShowAbout(true)}
-        >
-          <FontAwesomeIcon className='mr-2' icon={faCircleInfo} />
-          About
+    <ThemeProvider theme={currentTheme}>
+      <DropZoneWrapper
+        onEnter={() => setShowDropOverlay(true)}
+        onExit={() => setShowDropOverlay(false)}
+        onDrop={processFiles}
+        visibleOverlay={showDropOverlay}
+      >
+        {/* Drop file zone */}
+        <DropZoneOverlay show={showDropOverlay} />
+        {/* About this app */}
+        <AboutModal visible={showAbout} onDismiss={() => setShowAbout(false)} />
+        {/* Message box */}
+        <MessageBox
+          duration={messageBoxData.duration}
+          message={messageBoxData.message}
+          onDismiss={() =>
+            setMessageBoxData({ ...messageBoxData, show: false })
+          }
+          show={messageBoxData.show}
+          type={messageBoxData.type}
+        />
+        {/* Loader screen */}
+        <Loader show={processing} />
+        {/* Menu bar */}
+        <div className='flex select-none bg-sky-600 px-2 py-2'>
+          <div
+            className='px-4 py-2 text-sm text-neutral-50 rounded-full hover:cursor-pointer hover:bg-sky-700'
+            onClick={toggleTheme}
+          >
+            <FontAwesomeIcon
+              className='mr-2'
+              icon={currentTheme === 'light' ? faMoon : faSun}
+            />
+            Switch to {currentTheme === 'light' ? 'dark' : 'light'} mode
+          </div>
+          <div
+            className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded-full hover:cursor-pointer hover:bg-sky-700'
+            onClick={() => setShowAbout(true)}
+          >
+            <FontAwesomeIcon className='mr-2' icon={faCircleInfo} />
+            About
+          </div>
         </div>
-      </div>
-      {/* Content */}
-      <div className='flex flex-col w-screen h-screen overflow-y-hidden px-6 bg-neutral-200 dark:bg-gray-800'>
-        {/* Header */}
-        <Header
-          batchFormat={batchFormat}
-          batchQuality={batchQuality}
-          handleChangeBatchFormat={handleChangeBatchFormat}
-          handleChangeBatchQuality={handleChangeBatchQuality}
-          handleClickClearQuery={handleClickClearQuery}
-          handleClickConvert={handleClickConvert}
-          handleClickOpen={handleClickOpen}
-          processing={processing}
-          selectedImages={selectedImages}
-          title='WebP Converter'
-        />
-        {/* Table */}
-        <ImagesTable
-          batchFormat={batchFormat}
-          batchQuality={batchQuality}
-          handleChangeImageFormat={handleChangeImageFormat}
-          handleChangeImageQuality={handleChangeImageQuality}
-          handleClickColCheckbox={handleClickColCheckbox}
-          handleClickRowCheckbox={handleClickRowCheckbox}
-          handleClickRowDelete={handleClickRowDelete}
-          processing={processing}
-          selectedImages={selectedImages}
-        />
-      </div>
-    </DropZoneWrapper>
+        {/* Content */}
+        <div className='flex flex-col w-screen h-screen overflow-y-hidden px-6 bg-neutral-200 dark:bg-gray-800'>
+          {/* Header */}
+          <Header
+            batchFormat={batchFormat}
+            batchQuality={batchQuality}
+            handleChangeBatchFormat={handleChangeBatchFormat}
+            handleChangeBatchQuality={handleChangeBatchQuality}
+            handleClickClearQuery={handleClickClearQuery}
+            handleClickConvert={handleClickConvert}
+            handleClickOpen={handleClickOpen}
+            processing={processing}
+            selectedImages={selectedImages}
+            title='WebP Converter'
+          />
+          {/* Table */}
+          <ImagesTable
+            batchFormat={batchFormat}
+            batchQuality={batchQuality}
+            handleChangeImageFormat={handleChangeImageFormat}
+            handleChangeImageQuality={handleChangeImageQuality}
+            handleClickColCheckbox={handleClickColCheckbox}
+            handleClickRowCheckbox={handleClickRowCheckbox}
+            handleClickRowDelete={handleClickRowDelete}
+            processing={processing}
+            selectedImages={selectedImages}
+          />
+        </div>
+      </DropZoneWrapper>
+    </ThemeProvider>
   );
 };
 

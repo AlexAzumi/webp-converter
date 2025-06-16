@@ -16,6 +16,7 @@
     "@tauri-apps/api": "2.0.0",
     "@tauri-apps/plugin-dialog": "~2",
     "@tauri-apps/plugin-shell": "~2",
+    "@tauri-apps/plugin-store": "^2.2.0",
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.30",
     "react": "^18.2.0",
