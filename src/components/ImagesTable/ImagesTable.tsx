@@ -115,7 +115,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   </TableRow>
                   <TableRow className='text-center w-1/12'>
                     <select
-                      className='border px-2 py-1 rounded'
+                      className='border px-3 py-2 rounded-full'
                       value={item.quality}
                       disabled={processing || batchQuality > 0}
                       onChange={(event) =>
@@ -134,7 +134,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   </TableRow>
                   <TableRow className='text-center w-1/12'>
                     <select
-                      className='border px-2 py-1 rounded'
+                      className='border px-3 py-2 rounded-full'
                       disabled={processing || batchFormat > 0}
                       value={item.format}
                       onChange={(event) =>
