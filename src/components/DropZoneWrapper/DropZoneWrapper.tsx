@@ -46,7 +46,7 @@ const DropZoneWrapper: FC<DropZoneWrapperProps> = ({
     };
   }, []);
 
-  return <div className='h-full'>{children}</div>;
+  return <>{children}</>;
 };
 
 export default DropZoneWrapper;

@@ -56,104 +56,110 @@ const ImagesTable: FC<ImagesTableProps> = ({
 
   return useMemo(
     () => (
-      <table className='table-fixed w-full text-left mb-4'>
-        <thead>
-          <tr className='mb-2'>
-            <TableHeader className='text-center w-1/12'>
-              <div className='flex justify-center items-center'>
-                <input
-                  disabled={processing}
-                  type='checkbox'
-                  checked={checkIfSelectedAll()}
-                  onChange={(event) =>
-                    handleClickColCheckbox(event.currentTarget.checked)
-                  }
-                />
-              </div>
-            </TableHeader>
-            <TableHeader className='w-2/12'>Name</TableHeader>
-            <TableHeader className='w-5/12'>Path</TableHeader>
-            <TableHeader className='w-1/12'>Quality</TableHeader>
-            <TableHeader className='w-1/12'>Format</TableHeader>
-            <TableHeader className='w-1/12'>Remove</TableHeader>
-          </tr>
-        </thead>
-        <tbody className='last-'>
-          {selectedImages.map((item, index) => (
-            <tr key={item.name} className='mb-2'>
-              <TableRow className='text-center'>
+      <>
+        <table className='table-fixed text-left'>
+          <thead>
+            <tr className='mb-2'>
+              <TableHeader className='text-center w-1/12'>
                 <div className='flex justify-center items-center'>
                   <input
-                    checked={item.selected}
                     disabled={processing}
-                    onChange={() => handleClickRowCheckbox(index)}
                     type='checkbox'
+                    checked={checkIfSelectedAll()}
+                    onChange={(event) =>
+                      handleClickColCheckbox(event.currentTarget.checked)
+                    }
                   />
                 </div>
-              </TableRow>
-              <TableRow
-                className='whitespace-nowrap overflow-hidden text-ellipsis'
-                showDataTooltip
-              >
-                {item.name}
-              </TableRow>
-              <TableRow
-                className='whitespace-nowrap overflow-hidden text-ellipsis'
-                showDataTooltip
-              >
-                {item.src}
-              </TableRow>
-              <TableRow className='text-center'>
-                <select
-                  className='border px-2 py-1 rounded'
-                  value={item.quality}
-                  disabled={processing || batchQuality > 0}
-                  onChange={(event) =>
-                    handleChangeImageQuality(
-                      index,
-                      parseInt(event.currentTarget.value),
-                    )
-                  }
-                >
-                  {appConfig.qualityOptions.map((quality) => (
-                    <option key={`quality-${quality}`} value={quality}>
-                      {quality}
-                    </option>
-                  ))}
-                </select>
-              </TableRow>
-              <TableRow className='text-center'>
-                <select
-                  className='border px-2 py-1 rounded'
-                  disabled={processing}
-                  value={item.format}
-                  onChange={(event) =>
-                    handleChangeImageFormat(
-                      index,
-                      parseInt(event.currentTarget.value),
-                    )
-                  }
-                >
-                  {Object.keys(ImageFormat)
-                    .filter((item) => isNaN(Number(item)))
-                    .map((format, index) => (
-                      <option key={`format-${format}`} value={index}>
-                        {format}
-                      </option>
-                    ))}
-                </select>
-              </TableRow>
-              <TableRow className='text-center'>
-                <FontAwesomeIcon
-                  className='text-red-700 hover:cursor-pointer'
-                  icon={faTrash}
-                  onClick={() => handleClickRowDelete(index)}
-                />
-              </TableRow>
+              </TableHeader>
+              <TableHeader className='w-2/12'>Name</TableHeader>
+              <TableHeader className='w-5/12'>Path</TableHeader>
+              <TableHeader className='w-1/12'>Quality</TableHeader>
+              <TableHeader className='w-1/12'>Format</TableHeader>
+              <TableHeader className='w-1/12'>Remove</TableHeader>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+        </table>
+        <div className='flex overflow-auto mb-4'>
+          <table className='table-fixed w-full'>
+            <tbody>
+              {selectedImages.map((item, index) => (
+                <tr key={item.name} className='mb-2'>
+                  <TableRow className='text-center w-1/12'>
+                    <div className='flex justify-center items-center'>
+                      <input
+                        checked={item.selected}
+                        disabled={processing}
+                        onChange={() => handleClickRowCheckbox(index)}
+                        type='checkbox'
+                      />
+                    </div>
+                  </TableRow>
+                  <TableRow
+                    className='whitespace-nowrap overflow-hidden text-ellipsis w-2/12'
+                    showDataTooltip
+                  >
+                    {item.name}
+                  </TableRow>
+                  <TableRow
+                    className='whitespace-nowrap overflow-hidden text-ellipsis w-5/12'
+                    showDataTooltip
+                  >
+                    {item.src}
+                  </TableRow>
+                  <TableRow className='text-center w-1/12'>
+                    <select
+                      className='border px-2 py-1 rounded'
+                      value={item.quality}
+                      disabled={processing || batchQuality > 0}
+                      onChange={(event) =>
+                        handleChangeImageQuality(
+                          index,
+                          parseInt(event.currentTarget.value),
+                        )
+                      }
+                    >
+                      {appConfig.qualityOptions.map((quality) => (
+                        <option key={`quality-${quality}`} value={quality}>
+                          {quality}
+                        </option>
+                      ))}
+                    </select>
+                  </TableRow>
+                  <TableRow className='text-center w-1/12'>
+                    <select
+                      className='border px-2 py-1 rounded'
+                      disabled={processing}
+                      value={item.format}
+                      onChange={(event) =>
+                        handleChangeImageFormat(
+                          index,
+                          parseInt(event.currentTarget.value),
+                        )
+                      }
+                    >
+                      {Object.keys(ImageFormat)
+                        .filter((item) => isNaN(Number(item)))
+                        .map((format, index) => (
+                          <option key={`format-${format}`} value={index}>
+                            {format}
+                          </option>
+                        ))}
+                    </select>
+                  </TableRow>
+                  <TableRow className='text-center w-1/12'>
+                    <FontAwesomeIcon
+                      className='text-red-700 hover:cursor-pointer'
+                      icon={faTrash}
+                      onClick={() => handleClickRowDelete(index)}
+                    />
+                  </TableRow>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
     ),
     [selectedImages, processing, batchQuality],
   );
