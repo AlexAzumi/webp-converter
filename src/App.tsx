@@ -122,7 +122,9 @@ const App = () => {
           .map((item) => ({
             ...item,
             format:
-              batchFormat > 0 ? batchFormat - 1 : ImageFormat[item.format],
+              batchFormat > 0
+                ? ImageFormat[batchFormat - 1]
+                : ImageFormat[item.format],
             quality: batchQuality > 0 ? batchQuality : item.quality,
           })),
         folderToSave,
