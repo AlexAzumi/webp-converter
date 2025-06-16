@@ -43,7 +43,7 @@ const AboutModal: FC<AboutModalProps> = ({ visible, onDismiss }) => {
 
   return (
     <div className='flex absolute top-0 bottom-0 right-0 left-0 z-20 justify-center items-center bg-neutral-800/40 select-none backdrop-blur'>
-      <div className='px-8 py-6 bg-neutral-100 rounded text-neutral-700'>
+      <div className='px-8 py-6 bg-white rounded text-neutral-700 dark:bg-gray-700 dark:text-white'>
         <div className='border-b-2 pb-3 mb-3'>
           <div className='flex items-center'>
             <img className='mr-3' src='/logo.svg' width={80} />
@@ -58,7 +58,7 @@ const AboutModal: FC<AboutModalProps> = ({ visible, onDismiss }) => {
             <div className='flex flex-col justify-between flex-1 text-right'>
               <p>Alejandro Suárez (AlexAzumi)</p>
               <p
-                className='text-sky-600 hover:cursor-pointer hover:underline'
+                className='text-sky-600 dark:text-sky-400 hover:cursor-pointer hover:underline'
                 onClick={() => openExternalURL('https://github.com/AlexAzumi')}
               >
                 https://github.com/AlexAzumi
@@ -73,7 +73,7 @@ const AboutModal: FC<AboutModalProps> = ({ visible, onDismiss }) => {
         <div className='flex flex-col border-b-2 pb-4 mb-4'>
           <h1 className='text-xl mb-3 font-bold'>Open source code</h1>
           <p
-            className='text-sky-600 hover:cursor-pointer hover:underline'
+            className='text-sky-600 dark:text-sky-400 hover:cursor-pointer hover:underline'
             onClick={() =>
               openExternalURL('https://github.com/AlexAzumi/webp-converter')
             }
