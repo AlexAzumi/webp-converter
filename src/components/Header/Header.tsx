@@ -83,14 +83,16 @@ const Header: FC<HeaderProps> = ({
 
   return useMemo(
     () => (
-      <div className='py-4 bg-neutral-200 z-10'>
-        <div className='flex border p-6 justify-between items-center mb-4 rounded-lg bg-neutral-50'>
+      <div className='py-4 z-10'>
+        <div className='flex p-6 justify-between items-center mb-4 rounded-lg bg-white dark:bg-gray-700'>
           <div className='flex flex-col items-end select-none'>
-            <h1 className='flex items-center text-4xl font-bold mb-0 text-neutral-700'>
+            <h1 className='flex items-center text-4xl font-bold mb-0 text-gray-700 dark:text-white'>
               <img className='mr-3' src='/logo.svg' width={50} />
               {title}
             </h1>
-            <p>{getProperAppVersion()}</p>
+            <p className='text-neutral-700 dark:text-neutral-100'>
+              {getProperAppVersion()}
+            </p>
           </div>
           <Button
             disabled={!selectedImages?.length || processing}
@@ -117,7 +119,7 @@ const Header: FC<HeaderProps> = ({
             Clear query
           </Button>
           <div className='flex items-center ml-auto'>
-            <p className='pr-4'>Batch quality</p>
+            <p className='pr-4 text-gray-700 dark:text-white'>Batch quality</p>
             <Select
               options={config.qualityOptions.map((item) => ({
                 title: item.toString(),
@@ -128,7 +130,7 @@ const Header: FC<HeaderProps> = ({
             />
           </div>
           <div className='flex items-center ml-4'>
-            <p className='pr-4'>Batch format</p>
+            <p className='pr-4 text-gray-700 dark:text-white'>Batch format</p>
             <Select
               options={Object.keys(ImageFormat)
                 .filter((item) => isNaN(Number(item)))

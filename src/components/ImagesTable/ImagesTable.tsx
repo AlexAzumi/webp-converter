@@ -115,7 +115,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   </TableRow>
                   <TableRow className='text-center w-1/12'>
                     <select
-                      className='border px-3 py-2 rounded-full'
+                      className='border px-3 py-2 rounded-full bg-white dark:bg-gray-700 hover:cursor-pointer'
                       value={item.quality}
                       disabled={processing || batchQuality > 0}
                       onChange={(event) =>
@@ -134,7 +134,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   </TableRow>
                   <TableRow className='text-center w-1/12'>
                     <select
-                      className='border px-3 py-2 rounded-full'
+                      className='border px-3 py-2 rounded-full bg-white dark:bg-gray-700 hover:cursor-pointer'
                       disabled={processing || batchFormat > 0}
                       value={item.format}
                       onChange={(event) =>
@@ -155,7 +155,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   </TableRow>
                   <TableRow className='text-center w-1/12'>
                     <FontAwesomeIcon
-                      className='text-red-700 hover:cursor-pointer'
+                      className='text-red-700 dark:text-red-500 hover:cursor-pointer'
                       icon={faTrash}
                       onClick={() => handleClickRowDelete(index)}
                     />

@@ -87,7 +87,7 @@ const TableRow: FC<TableRowProps> = ({
 
   return (
     <td
-      className={`px-3 py-2 bg-neutral-50 select-none ${className}`}
+      className={`px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-white select-none ${className}`}
       onMouseEnter={handleEnterMouse}
       onMouseLeave={handleExitMouse}
       onMouseMove={handleMouseMove}
@@ -120,7 +120,7 @@ const RowTooltip: FC<RowTooltipProps> = ({
 
   return (
     <div
-      className='flex absolute top-0 bg-neutral-50 px-4 py-2 border-2 pointer-events-none text-neutral-700 rounded-lg z-10'
+      className='flex absolute top-0 bg-white px-4 py-2 border-2 pointer-events-none text-neutral-700 rounded-lg z-10 dark:bg-gray-700 dark:text-white'
       style={{
         left: positionX + offset.x,
         top: positionY + offset.y,

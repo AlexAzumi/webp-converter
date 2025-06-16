@@ -224,7 +224,7 @@ const App = () => {
         </div>
       </div>
       {/* Content */}
-      <div className='flex flex-col w-screen h-screen overflow-y-hidden px-6 bg-neutral-200'>
+      <div className='flex flex-col w-screen h-screen overflow-y-hidden px-6 bg-neutral-200 dark:bg-gray-800'>
         {/* Header */}
         <Header
           batchFormat={batchFormat}

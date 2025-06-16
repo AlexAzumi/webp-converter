@@ -42,7 +42,7 @@ const AboutModal: FC<AboutModalProps> = ({ visible, onDismiss }) => {
   }
 
   return (
-    <div className='flex absolute top-0 bottom-0 right-0 left-0 z-20 justify-center items-center bg-neutral-800/40 select-none'>
+    <div className='flex absolute top-0 bottom-0 right-0 left-0 z-20 justify-center items-center bg-neutral-800/40 select-none backdrop-blur'>
       <div className='px-8 py-6 bg-neutral-100 rounded text-neutral-700'>
         <div className='border-b-2 pb-3 mb-3'>
           <div className='flex items-center'>
