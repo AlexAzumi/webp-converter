@@ -20,7 +20,7 @@
   "productName": "WebP Converter",
   "mainBinaryName": "WebP Converter",
   "version": "1.2.0",
-  "identifier": "com.azumi.dev",
+  "identifier": "com.alexazumi.webp-converter",
   "plugins": {},
   "app": {
     "withGlobalTauri": false,
