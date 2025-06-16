@@ -3,9 +3,15 @@ import { getCurrentWebview } from '@tauri-apps/api/webview';
 import { FC, PropsWithChildren, useEffect, useRef } from 'react';
 
 interface DropZoneWrapperProps extends PropsWithChildren {
+  /**
+   * Whether the overlay is visible or not
+   */
   visibleOverlay: boolean;
+
   onEnter(): void;
+
   onExit(): void;
+
   onDrop(files: string[]): void;
 }
 
@@ -27,6 +33,7 @@ const DropZoneWrapper: FC<DropZoneWrapperProps> = ({
               onEnter();
             }
           } else if (event.payload.type === 'drop') {
+            // TODO: Filter folder and files that are not compatible
             onDrop(event.payload.paths);
 
             onExit();
@@ -44,7 +51,7 @@ const DropZoneWrapper: FC<DropZoneWrapperProps> = ({
         unlistenRef.current();
       }
     };
-  }, []);
+  }, [visibleOverlay]);
 
   return <>{children}</>;
 };
