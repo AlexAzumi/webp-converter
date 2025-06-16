@@ -1,16 +1,18 @@
-import { useCallback, useState } from 'react';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { useCallback, useState } from 'react';
 
-import { Image, ImageFormat } from './interfaces/Image';
+import { type Image, ImageFormat } from './interfaces/Image';
 
-import { MessageBox } from './components/MessageBox';
-import { Loader } from './components/Loader';
-import { Header } from './components/Header';
 import { AboutModal } from './components/AboutModal';
+import { DropZoneOverlay } from './components/DropZoneOverlay';
+import { Header } from './components/Header';
 import { ImagesTable } from './components/ImagesTable';
+import { Loader } from './components/Loader';
+import { MessageBox } from './components/MessageBox';
+import { DropZoneWrapper } from './components/DropZoneWrapper';
 
 const App = () => {
   const [selectedImages, setSelectedImages] = useState<Image[]>([]);
@@ -23,6 +25,7 @@ const App = () => {
     type: 'Success',
   });
   const [batchQuality, setBatchQuality] = useState(0);
+  const [showDropOverlay, setShowDropOverlay] = useState(false);
 
   const handleClickRowCheckbox = useCallback(
     (index: number) => {
@@ -99,27 +102,7 @@ const App = () => {
       title: 'Select files to add to the query',
     });
 
-    if (selectedFiles && typeof selectedFiles === 'object') {
-      const mappedImages = selectedFiles.map((item) => {
-        const splittedPath = item.split('\\');
-        const name = splittedPath[splittedPath.length - 1];
-
-        return {
-          format: ImageFormat.WEBP,
-          name,
-          quality: 100,
-          selected: true,
-          src: item,
-        };
-      });
-
-      const imageSrc = new Set(selectedImages.map((item) => item.src));
-
-      setSelectedImages([
-        ...selectedImages,
-        ...mappedImages.filter((item) => !imageSrc.has(item.src)),
-      ]);
-    }
+    processFiles(selectedFiles);
   }, [selectedImages]);
 
   const handleClickConvert = useCallback(async () => {
@@ -166,14 +149,44 @@ const App = () => {
 
   const handleBatchQuality = useCallback(
     (newValue: number) => {
-      console.log(newValue);
       setBatchQuality(newValue);
     },
     [batchQuality],
   );
 
+  const processFiles = (selectedFiles: string[] | null) => {
+    if (selectedFiles && typeof selectedFiles === 'object') {
+      const mappedImages = selectedFiles.map((item) => {
+        const splittedPath = item.split('\\');
+        const name = splittedPath[splittedPath.length - 1];
+
+        return {
+          format: ImageFormat.WEBP,
+          name,
+          quality: 100,
+          selected: true,
+          src: item,
+        };
+      });
+
+      const imageSrc = new Set(selectedImages.map((item) => item.src));
+
+      setSelectedImages([
+        ...selectedImages,
+        ...mappedImages.filter((item) => !imageSrc.has(item.src)),
+      ]);
+    }
+  };
+
   return (
-    <>
+    <DropZoneWrapper
+      onEnter={() => setShowDropOverlay(true)}
+      onExit={() => setShowDropOverlay(false)}
+      onDrop={processFiles}
+      visibleOverlay={showDropOverlay}
+    >
+      {/* Drop file zone */}
+      <DropZoneOverlay show={showDropOverlay} />
       {/* About this app */}
       <AboutModal visible={showAbout} onDismiss={() => setShowAbout(false)} />
       {/* Message box */}
@@ -221,7 +234,7 @@ const App = () => {
           selectedImages={selectedImages}
         />
       </div>
-    </>
+    </DropZoneWrapper>
   );
 };
 
