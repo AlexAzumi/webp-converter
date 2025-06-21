@@ -5,7 +5,7 @@ interface ThemeProviderProps extends PropsWithChildren {
 }
 
 const ThemeProvider: FC<ThemeProviderProps> = ({ theme, children }) => {
-  return <div className={theme}>{children}</div>;
+  return <div className={`flex flex-col h-full ${theme}`}>{children}</div>;
 };
 
 export default ThemeProvider;
