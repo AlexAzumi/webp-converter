@@ -19,7 +19,7 @@
   },
   "productName": "WebP Converter",
   "mainBinaryName": "WebP Converter",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "identifier": "com.alexazumi.webp-converter",
   "plugins": {},
   "app": {
