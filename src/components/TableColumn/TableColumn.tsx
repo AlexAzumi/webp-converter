@@ -87,7 +87,7 @@ const TableRow: FC<TableRowProps> = ({
 
   return (
     <td
-      className={`px-3 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-white select-none ${className}`}
+      className={`px-3 py-2 ${className}`}
       onMouseEnter={handleEnterMouse}
       onMouseLeave={handleExitMouse}
       onMouseMove={handleMouseMove}

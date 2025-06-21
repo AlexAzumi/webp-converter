@@ -5,7 +5,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Image, ImageFormat } from '../../interfaces/Image';
 
 import { TableHeader } from '../TableHeader';
-import { TableRow } from '../TableRow';
+import { TableColumn } from '../TableColumn';
 
 import appConfig from '../../config.app.json';
 
@@ -90,8 +90,11 @@ const ImagesTable: FC<ImagesTableProps> = ({
           <table className='table-fixed w-full'>
             <tbody>
               {selectedImages.map((item, index) => (
-                <tr key={item.name} className='mb-2'>
-                  <TableRow className='text-center w-1/12'>
+                <tr
+                  key={item.name}
+                  className='bg-white even:bg-neutral-200 dark:bg-gray-700 dark:even:bg-gray-600 text-gray-700 dark:text-white mb-2 select-none'
+                >
+                  <TableColumn className='text-center w-1/12'>
                     <div className='flex justify-center items-center'>
                       <input
                         checked={item.selected}
@@ -100,20 +103,20 @@ const ImagesTable: FC<ImagesTableProps> = ({
                         type='checkbox'
                       />
                     </div>
-                  </TableRow>
-                  <TableRow
+                  </TableColumn>
+                  <TableColumn
                     className='whitespace-nowrap overflow-hidden text-ellipsis w-2/12'
                     showDataTooltip
                   >
                     {item.name}
-                  </TableRow>
-                  <TableRow
+                  </TableColumn>
+                  <TableColumn
                     className='whitespace-nowrap overflow-hidden text-ellipsis w-5/12'
                     showDataTooltip
                   >
                     {item.src}
-                  </TableRow>
-                  <TableRow className='text-center w-1/12'>
+                  </TableColumn>
+                  <TableColumn className='text-center w-1/12'>
                     <select
                       className='border px-3 py-2 rounded-full bg-white dark:bg-gray-700 hover:cursor-pointer disabled:hover:cursor-not-allowed'
                       value={item.quality}
@@ -131,8 +134,8 @@ const ImagesTable: FC<ImagesTableProps> = ({
                         </option>
                       ))}
                     </select>
-                  </TableRow>
-                  <TableRow className='text-center w-1/12'>
+                  </TableColumn>
+                  <TableColumn className='text-center w-1/12'>
                     <select
                       className='border px-3 py-2 rounded-full bg-white dark:bg-gray-700 hover:cursor-pointer disabled:hover:cursor-not-allowed'
                       disabled={processing || batchFormat > 0}
@@ -152,14 +155,14 @@ const ImagesTable: FC<ImagesTableProps> = ({
                           </option>
                         ))}
                     </select>
-                  </TableRow>
-                  <TableRow className='text-center w-1/12'>
+                  </TableColumn>
+                  <TableColumn className='text-center w-1/12'>
                     <FontAwesomeIcon
                       className='text-red-700 dark:text-red-500 hover:cursor-pointer'
                       icon={faTrash}
                       onClick={() => handleClickRowDelete(index)}
                     />
-                  </TableRow>
+                  </TableColumn>
                 </tr>
               ))}
             </tbody>
