@@ -86,7 +86,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
             </tr>
           </thead>
         </table>
-        <div className='flex overflow-auto mb-4 max-h-full'>
+        <div className='flex overflow-auto mb-4 max-h-full rounded-b'>
           <table className='table-fixed w-full'>
             <tbody>
               {selectedImages.map((item, index) => (
