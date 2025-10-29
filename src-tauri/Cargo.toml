@@ -1,6 +1,6 @@
 [package]
 name = "webp-converter"
-version = "1.2.2"
+version = "1.2.3"
 description = "Desktop app that lets you convert .jpg or .png images to .web and viceversa"
 authors = ["AlexAzumi"]
 license = ""
@@ -13,14 +13,14 @@ edition = "2021"
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = [] }
+tauri = { version = "2.9", features = [] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 webp = "0.2.5"
 image = "0.24.7"
-tauri-plugin-dialog = "2"
-tauri-plugin-shell = "2"
-tauri-plugin-store = "2"
+tauri-plugin-dialog = "2.4"
+tauri-plugin-shell = "2.3"
+tauri-plugin-store = "2.4"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

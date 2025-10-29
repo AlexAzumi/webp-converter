@@ -17,7 +17,10 @@ import { ThemeProvider } from './components/ThemeProvider';
 import { type Image, ImageFormat } from './interfaces/Image';
 
 const App = () => {
-  const store = new LazyStore('settings.json', { autoSave: true });
+  const store = new LazyStore('settings.json', {
+    autoSave: true,
+    defaults: {},
+  });
 
   const [selectedImages, setSelectedImages] = useState<Image[]>([]);
   const [processing, setProcessing] = useState(false);
