@@ -131,6 +131,7 @@ const App = () => {
       multiple: false,
       directory: true,
       title: 'Select the folder to save the converted files',
+      defaultPath: selectedImages[0].src,
     });
 
     if (folderToSave && typeof folderToSave === 'string') {
