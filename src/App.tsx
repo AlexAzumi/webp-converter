@@ -166,8 +166,8 @@ const App = () => {
               count === totalToProcess
                 ? 'Sucesss'
                 : count > 0
-                ? 'Warning'
-                : 'Error',
+                  ? 'Warning'
+                  : 'Error',
           });
         })
         .catch(console.error)
@@ -258,7 +258,7 @@ const App = () => {
         {/* Menu bar */}
         <div className='flex select-none bg-sky-600 px-2 py-2'>
           <div
-            className='px-4 py-2 text-sm text-neutral-50 rounded-full hover:cursor-pointer hover:bg-sky-700'
+            className='px-4 py-2 text-sm text-neutral-50 rounded-md hover:cursor-pointer hover:bg-sky-700'
             onClick={toggleTheme}
           >
             <FontAwesomeIcon
@@ -268,7 +268,7 @@ const App = () => {
             Switch to {currentTheme === 'light' ? 'dark' : 'light'} mode
           </div>
           <div
-            className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded-full hover:cursor-pointer hover:bg-sky-700'
+            className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded-md hover:cursor-pointer hover:bg-sky-700'
             onClick={() => setShowAbout(true)}
           >
             <FontAwesomeIcon className='mr-2' icon={faCircleInfo} />

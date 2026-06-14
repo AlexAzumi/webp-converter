@@ -23,6 +23,11 @@ export interface Image {
    * Format that the image will be converted to
    */
   format: ImageFormat;
+
+  /**
+   * Compression type of the image (0 to 2) | `Note: Only applies to .png convertion`
+   */
+  compression: CompressionType;
 }
 
 export enum ImageFormat {
@@ -31,4 +36,10 @@ export enum ImageFormat {
   PNG,
   TIFF,
   BMP,
+}
+
+export enum CompressionType {
+  Default,
+  Fast,
+  Best,
 }
