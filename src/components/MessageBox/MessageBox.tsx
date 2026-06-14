@@ -76,7 +76,7 @@ const MessageBox: FC<MessageBoxProps> = ({
       ) : null}
       <p>{message}</p>
       <FontAwesomeIcon
-        className={`absolute -top-3 -left-3 text-white hover:cursor-pointer p-1 rounded-md ${backgroundColor}`}
+        className={`absolute -top-3 -left-3 text-white hover:cursor-pointer p-1 rounded-full ${backgroundColor}`}
         icon={faCircleXmark}
         size='xl'
         onClick={onDismiss}
