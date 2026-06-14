@@ -92,7 +92,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
               {selectedImages.map((item, index) => (
                 <tr
                   key={item.name}
-                  className='bg-white even:bg-neutral-200 dark:bg-gray-700 dark:even:bg-gray-600 text-gray-700 dark:text-white mb-2 select-none'
+                  className='bg-white even:bg-neutral-100 dark:bg-gray-700 dark:even:bg-gray-600 text-gray-700 dark:text-white mb-2 select-none'
                 >
                   <TableColumn className='text-center w-1/12'>
                     <div className='flex justify-center items-center'>
