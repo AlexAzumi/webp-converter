@@ -2,8 +2,8 @@ import { faCircleInfo, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
-import { useCallback, useEffect, useState } from 'react';
 import { LazyStore } from '@tauri-apps/plugin-store';
+import { useCallback, useEffect, useState } from 'react';
 
 import { AboutModal } from './components/AboutModal';
 import { DropZoneOverlay } from './components/DropZoneOverlay';

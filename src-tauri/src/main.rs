@@ -34,7 +34,6 @@ struct Image {
     name: String,
     quality: i8,
     src: String,
-    compression: i8,
 }
 
 async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
@@ -74,7 +73,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             let ref mut buff = BufWriter::new(new_file);
             let encoder: JpegEncoder<&mut BufWriter<File>>;
 
-            if data.quality != 0 {
+            if data.quality != 100 {
                 encoder = JpegEncoder::new_with_quality(buff, data.quality as u8);
             } else {
                 encoder = JpegEncoder::new(buff);
@@ -95,10 +94,13 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             let new_file: File = File::create(new_path.clone()).unwrap();
             let ref mut buff = BufWriter::new(new_file);
             let encoder: PngEncoder<&mut BufWriter<File>>;
-            let compression = get_png_compression_type(data.compression);
 
-            if compression != CompressionType::Default {
-                encoder = PngEncoder::new_with_quality(buff, compression, FilterType::NoFilter);
+            if data.quality != 100 {
+                encoder = PngEncoder::new_with_quality(
+                    buff,
+                    CompressionType::Default,
+                    FilterType::NoFilter,
+                );
             } else {
                 encoder = PngEncoder::new(buff);
             }
@@ -118,6 +120,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             let new_file: File = File::create(new_path.clone()).unwrap();
             let ref mut buff = BufWriter::new(new_file);
             let encoder = TiffEncoder::new(buff);
+
             // Encode to `tiff`
             match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
                 Ok(_) => Ok(()),
@@ -133,7 +136,8 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             let new_file: File = File::create(new_path.clone()).unwrap();
             let ref mut buff = BufWriter::new(new_file);
             let encoder = BmpEncoder::new(buff);
-            // Encode to `tiff`
+
+            // Encode to `bmp`
             match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
                 Ok(_) => Ok(()),
                 Err(err) => {
@@ -145,7 +149,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             }
         }
         ImageFormat::WEBP => {
-            if data.compression == -1 {
+            if data.quality == 100 {
                 let new_file: File = File::create(new_path.clone()).unwrap();
                 let ref mut buff = BufWriter::new(new_file);
                 let encoder = WebPEncoder::new_lossless(buff);
@@ -176,15 +180,6 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
                 }
             }
         }
-    }
-}
-
-fn get_png_compression_type(compression: i8) -> CompressionType {
-    match compression {
-        0 => CompressionType::Default,
-        1 => CompressionType::Fast,
-        2 => CompressionType::Best,
-        _ => CompressionType::Default,
     }
 }
 

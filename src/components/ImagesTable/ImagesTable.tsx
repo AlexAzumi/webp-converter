@@ -120,7 +120,12 @@ const ImagesTable: FC<ImagesTableProps> = ({
                     <select
                       className='border px-3 py-2 rounded-md bg-white dark:bg-gray-700 hover:cursor-pointer disabled:hover:cursor-not-allowed'
                       value={item.quality}
-                      disabled={processing || batchQuality > 0}
+                      disabled={
+                        processing ||
+                        batchQuality > 0 ||
+                        item.format === ImageFormat.BMP ||
+                        item.format === ImageFormat.TIFF
+                      }
                       onChange={(event) =>
                         handleChangeImageQuality(
                           index,
