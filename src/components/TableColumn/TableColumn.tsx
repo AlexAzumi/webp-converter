@@ -120,7 +120,7 @@ const RowTooltip: FC<RowTooltipProps> = ({
 
   return (
     <div
-      className='flex absolute top-0 bg-white px-4 py-2 border-2 pointer-events-none text-neutral-700 rounded-lg z-10 dark:bg-gray-700 dark:text-white'
+      className='flex absolute top-0 bg-white px-4 py-2 border-2 pointer-events-none text-neutral-700 rounded-md z-10 dark:bg-gray-700 dark:text-white'
       style={{
         left: positionX + offset.x,
         top: positionY + offset.y,
