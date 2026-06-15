@@ -43,7 +43,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-          cache: 'yarn' # Set this to npm, yarn or pnpm.
+          cache: 'pnpm' # Set this to npm, yarn or pnpm.
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -56,7 +56,7 @@ jobs:
           workspaces: './src-tauri -> target'
 
       - name: Install frontend dependencies
-        run: yarn install
+        run: pnpm install
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
