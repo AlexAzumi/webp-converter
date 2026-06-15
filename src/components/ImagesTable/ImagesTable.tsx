@@ -92,7 +92,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
               {selectedImages.map((item, index) => (
                 <tr
                   key={item.name}
-                  className='bg-white even:bg-neutral-200 dark:bg-gray-700 dark:even:bg-gray-600 text-gray-700 dark:text-white mb-2 select-none'
+                  className='bg-white even:bg-neutral-100 dark:bg-gray-700 dark:even:bg-gray-600 text-gray-700 dark:text-white mb-2 select-none'
                 >
                   <TableColumn className='text-center w-1/12'>
                     <div className='flex justify-center items-center'>
@@ -118,9 +118,14 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   </TableColumn>
                   <TableColumn className='text-center w-1/12'>
                     <select
-                      className='border px-3 py-2 rounded-full bg-white dark:bg-gray-700 hover:cursor-pointer disabled:hover:cursor-not-allowed'
+                      className='border px-3 py-2 rounded-md bg-white dark:bg-gray-700 hover:cursor-pointer disabled:hover:cursor-not-allowed'
                       value={item.quality}
-                      disabled={processing || batchQuality > 0}
+                      disabled={
+                        processing ||
+                        batchQuality > 0 ||
+                        item.format === ImageFormat.BMP ||
+                        item.format === ImageFormat.TIFF
+                      }
                       onChange={(event) =>
                         handleChangeImageQuality(
                           index,
@@ -137,7 +142,7 @@ const ImagesTable: FC<ImagesTableProps> = ({
                   </TableColumn>
                   <TableColumn className='text-center w-1/12'>
                     <select
-                      className='border px-3 py-2 rounded-full bg-white dark:bg-gray-700 hover:cursor-pointer disabled:hover:cursor-not-allowed'
+                      className='border px-3 py-2 rounded-md bg-white dark:bg-gray-700 hover:cursor-pointer disabled:hover:cursor-not-allowed'
                       disabled={processing || batchFormat > 0}
                       value={item.format}
                       onChange={(event) =>

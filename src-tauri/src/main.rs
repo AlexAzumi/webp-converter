@@ -2,7 +2,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use image::{
-    codecs::{bmp::BmpEncoder, jpeg::JpegEncoder, png::PngEncoder, tiff::TiffEncoder},
+    codecs::{
+        bmp::BmpEncoder,
+        jpeg::JpegEncoder,
+        png::{CompressionType, FilterType, PngEncoder},
+        tiff::TiffEncoder,
+        webp::WebPEncoder,
+    },
     DynamicImage, ImageEncoder,
 };
 use serde::{Deserialize, Serialize};
@@ -65,7 +71,14 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
         ImageFormat::JPG => {
             let new_file: File = File::create(new_path.clone()).unwrap();
             let ref mut buff = BufWriter::new(new_file);
-            let encoder = JpegEncoder::new(buff);
+            let encoder: JpegEncoder<&mut BufWriter<File>>;
+
+            if data.quality != 100 {
+                encoder = JpegEncoder::new_with_quality(buff, data.quality as u8);
+            } else {
+                encoder = JpegEncoder::new(buff);
+            }
+
             // Encode to `jpg`
             match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
                 Ok(_) => Ok(()),
@@ -80,7 +93,18 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
         ImageFormat::PNG => {
             let new_file: File = File::create(new_path.clone()).unwrap();
             let ref mut buff = BufWriter::new(new_file);
-            let encoder = PngEncoder::new(buff);
+            let encoder: PngEncoder<&mut BufWriter<File>>;
+
+            if data.quality != 100 {
+                encoder = PngEncoder::new_with_quality(
+                    buff,
+                    CompressionType::Default,
+                    FilterType::NoFilter,
+                );
+            } else {
+                encoder = PngEncoder::new(buff);
+            }
+
             // Encode to `png`
             match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
                 Ok(_) => Ok(()),
@@ -96,6 +120,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             let new_file: File = File::create(new_path.clone()).unwrap();
             let ref mut buff = BufWriter::new(new_file);
             let encoder = TiffEncoder::new(buff);
+
             // Encode to `tiff`
             match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
                 Ok(_) => Ok(()),
@@ -111,7 +136,8 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             let new_file: File = File::create(new_path.clone()).unwrap();
             let ref mut buff = BufWriter::new(new_file);
             let encoder = BmpEncoder::new(buff);
-            // Encode to `tiff`
+
+            // Encode to `bmp`
             match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
                 Ok(_) => Ok(()),
                 Err(err) => {
@@ -123,18 +149,35 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             }
         }
         ImageFormat::WEBP => {
-            let encoder: Result<Encoder<'_>, &str> = Encoder::from_image(&img);
+            if data.quality == 100 {
+                let new_file: File = File::create(new_path.clone()).unwrap();
+                let ref mut buff = BufWriter::new(new_file);
+                let encoder = WebPEncoder::new_lossless(buff);
 
-            match encoder {
-                Ok(_encoder) => {
-                    let webp: WebPMemory = _encoder.encode(data.quality as f32);
+                // Encode to lossless `webp`
+                match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
+                    Ok(_) => Ok(()),
+                    Err(err) => {
+                        // Delete unprocessed image
+                        fs::remove_file(new_path).unwrap();
 
-                    match fs::write(&new_path, &*webp) {
-                        Ok(_) => Ok(()),
-                        Err(err) => Err(err.to_string()),
+                        Err(err.to_string())
                     }
                 }
-                Err(err) => Err(err.to_string()),
+            } else {
+                let encoder: Result<Encoder<'_>, &str> = Encoder::from_image(&img);
+
+                match encoder {
+                    Ok(_encoder) => {
+                        let webp: WebPMemory = _encoder.encode(data.quality as f32);
+
+                        match fs::write(&new_path, &*webp) {
+                            Ok(_) => Ok(()),
+                            Err(err) => Err(err.to_string()),
+                        }
+                    }
+                    Err(err) => Err(err.to_string()),
+                }
             }
         }
     }

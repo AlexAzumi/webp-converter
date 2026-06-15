@@ -2,8 +2,8 @@ import { faCircleInfo, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
-import { useCallback, useEffect, useState } from 'react';
 import { LazyStore } from '@tauri-apps/plugin-store';
+import { useCallback, useEffect, useState } from 'react';
 
 import { AboutModal } from './components/AboutModal';
 import { DropZoneOverlay } from './components/DropZoneOverlay';
@@ -166,8 +166,8 @@ const App = () => {
               count === totalToProcess
                 ? 'Sucesss'
                 : count > 0
-                ? 'Warning'
-                : 'Error',
+                  ? 'Warning'
+                  : 'Error',
           });
         })
         .catch(console.error)
@@ -258,7 +258,7 @@ const App = () => {
         {/* Menu bar */}
         <div className='flex select-none bg-sky-600 px-2 py-2'>
           <div
-            className='px-4 py-2 text-sm text-neutral-50 rounded-full hover:cursor-pointer hover:bg-sky-700'
+            className='px-4 py-2 text-sm text-neutral-50 rounded-md hover:cursor-pointer hover:bg-sky-700'
             onClick={toggleTheme}
           >
             <FontAwesomeIcon
@@ -268,7 +268,7 @@ const App = () => {
             Switch to {currentTheme === 'light' ? 'dark' : 'light'} mode
           </div>
           <div
-            className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded-full hover:cursor-pointer hover:bg-sky-700'
+            className='px-4 py-2 text-sm ml-auto text-neutral-50 rounded-md hover:cursor-pointer hover:bg-sky-700'
             onClick={() => setShowAbout(true)}
           >
             <FontAwesomeIcon className='mr-2' icon={faCircleInfo} />
