@@ -17,7 +17,7 @@ use std::{
     io::BufWriter,
     path::Path,
 };
-use webp::*;
+use webp::{Encoder, WebPMemory};
 
 #[derive(Serialize, Deserialize, Clone, Copy)]
 enum ImageFormat {
@@ -44,13 +44,17 @@ async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
         let img = image::open(file.src);
 
         match img {
-            Ok(_img) => match encode_image(data, &_img, folder_to_save) {
+            Ok(_img) => {
+              let _img = _img.to_rgb8().into();
+
+              match encode_image(data, &_img, folder_to_save) {
                 Ok(_) => {
                     converted_files += 1;
                 }
                 Err(err) => {
                     println!("Error while processing the image {}: {}", file.name, err);
                 }
+            }
             },
             Err(err) => {
                 println!("Error while loading the image {}: {}", data.name, err);
@@ -80,7 +84,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             }
 
             // Encode to `jpg`
-            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
+            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
                 Ok(_) => Ok(()),
                 Err(err) => {
                     // Delete unprocessed image
@@ -106,7 +110,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             }
 
             // Encode to `png`
-            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
+            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
                 Ok(_) => Ok(()),
                 Err(err) => {
                     // Delete unprocessed image
@@ -122,7 +126,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             let encoder = TiffEncoder::new(buff);
 
             // Encode to `tiff`
-            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
+            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
                 Ok(_) => Ok(()),
                 Err(err) => {
                     // Delete unprocessed image
@@ -138,7 +142,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
             let encoder = BmpEncoder::new(buff);
 
             // Encode to `bmp`
-            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
+            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
                 Ok(_) => Ok(()),
                 Err(err) => {
                     // Delete unprocessed image
@@ -155,7 +159,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
                 let encoder = WebPEncoder::new_lossless(buff);
 
                 // Encode to lossless `webp`
-                match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color()) {
+                match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
                     Ok(_) => Ok(()),
                     Err(err) => {
                         // Delete unprocessed image
@@ -165,7 +169,7 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
                     }
                 }
             } else {
-                let encoder: Result<Encoder<'_>, &str> = Encoder::from_image(&img);
+                let encoder: Result<Encoder<'_>, &str> = Encoder::from_image(img);
 
                 match encoder {
                     Ok(_encoder) => {
