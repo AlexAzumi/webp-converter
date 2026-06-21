@@ -44,9 +44,7 @@ async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
         let img = image::open(file.src);
 
         match img {
-            Ok(_img) => {
-              let _img = _img.to_rgb8().into();
-
+            Ok(_img) => {              
               match encode_image(data, &_img, folder_to_save) {
                 Ok(_) => {
                     converted_files += 1;
@@ -83,8 +81,10 @@ fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result
                 encoder = JpegEncoder::new(buff);
             }
 
+            let _img: DynamicImage = img.to_rgb8().into();
+
             // Encode to `jpg`
-            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
+            match encoder.write_image(_img.as_bytes(), img.width(), img.height(), img.color().into()) {
                 Ok(_) => Ok(()),
                 Err(err) => {
                     // Delete unprocessed image
