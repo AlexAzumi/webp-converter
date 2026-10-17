@@ -21,6 +21,7 @@ image = "0.25.9"
 tauri-plugin-dialog = "2.7"
 tauri-plugin-shell = "2.3"
 tauri-plugin-store = "2.4"
+jpegxl-rs = { version = "0.16.0", features = ["vendored"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

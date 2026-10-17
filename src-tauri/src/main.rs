@@ -2,214 +2,231 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use image::{
-    codecs::{
-        bmp::BmpEncoder,
-        jpeg::JpegEncoder,
-        png::{CompressionType, FilterType, PngEncoder},
-        tiff::TiffEncoder,
-        webp::WebPEncoder,
-    },
-    DynamicImage, ImageEncoder,
+  codecs::{
+    bmp::BmpEncoder,
+    jpeg::JpegEncoder,
+    png::{ CompressionType, FilterType, PngEncoder },
+    tiff::TiffEncoder,
+    webp::WebPEncoder,
+  },
+  DynamicImage,
+  ImageEncoder,
 };
-use serde::{Deserialize, Serialize};
-use std::{
-    fs::{self, File},
-    io::BufWriter,
-    path::Path,
-};
-use webp::{Encoder, WebPMemory};
+use jpegxl_rs::encoder_builder;
+use serde::{ Deserialize, Serialize };
+use std::{ fs::{ self, File }, io::BufWriter, path::Path };
+use webp::*;
 
 #[derive(Serialize, Deserialize, Clone, Copy)]
 enum ImageFormat {
-    WEBP,
-    JPG,
-    PNG,
-    TIFF,
-    BMP,
+  WEBP,
+  JPG,
+  PNG,
+  TIFF,
+  BMP,
+  JPEGXL,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 struct Image {
-    format: ImageFormat,
-    name: String,
-    quality: i8,
-    src: String,
+  format: ImageFormat,
+  name: String,
+  quality: i8,
+  src: String,
 }
 
 async fn process_images(files: Vec<Image>, folder_to_save: &str) -> i8 {
-    let mut converted_files = 0;
+  let mut converted_files = 0;
 
-    for file in files {
-        let data = file.clone();
-        let img = image::open(file.src);
+  for file in files {
+    let data = file.clone();
+    let img = image::open(file.src);
 
-        match img {
-            Ok(_img) => {              
-              match encode_image(data, &_img, folder_to_save) {
-                Ok(_) => {
-                    converted_files += 1;
-                }
-                Err(err) => {
-                    println!("Error while processing the image {}: {}", file.name, err);
-                }
-            }
-            },
-            Err(err) => {
-                println!("Error while loading the image {}: {}", data.name, err);
-            }
+    match img {
+      Ok(_img) =>
+        match encode_image(data, &_img, folder_to_save) {
+          Ok(_) => {
+            converted_files += 1;
+          }
+          Err(err) => {
+            println!("Error while processing the image {}: {}", file.name, err);
+          }
         }
+      Err(err) => {
+        println!("Error while loading the image {}: {}", data.name, err);
+      }
     }
+  }
 
-    return converted_files;
+  return converted_files;
 }
 
 fn encode_image(data: Image, img: &DynamicImage, folder_to_save: &str) -> Result<(), String> {
-    let file_extension = get_format_extension(data.format);
-    let new_path = Path::new(folder_to_save)
-        .join(data.name)
-        .with_extension(file_extension);
+  let file_extension = get_format_extension(data.format);
+  let new_path = Path::new(folder_to_save).join(data.name).with_extension(file_extension);
 
-    match data.format {
-        ImageFormat::JPG => {
-            let new_file: File = File::create(new_path.clone()).unwrap();
-            let ref mut buff = BufWriter::new(new_file);
-            let encoder: JpegEncoder<&mut BufWriter<File>>;
+  match data.format {
+    ImageFormat::JPG => {
+      let new_file: File = File::create(new_path.clone()).unwrap();
+      let ref mut buff = BufWriter::new(new_file);
+      let encoder: JpegEncoder<&mut BufWriter<File>>;
 
-            if data.quality != 100 {
-                encoder = JpegEncoder::new_with_quality(buff, data.quality as u8);
-            } else {
-                encoder = JpegEncoder::new(buff);
-            }
+      if data.quality != 100 {
+        encoder = JpegEncoder::new_with_quality(buff, data.quality as u8);
+      } else {
+        encoder = JpegEncoder::new(buff);
+      }
 
-            let _img: DynamicImage = img.to_rgb8().into();
+      // Encode to `jpg`
+      match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
+        Ok(_) => Ok(()),
+        Err(err) => {
+          // Delete unprocessed image
+          fs::remove_file(new_path).unwrap();
 
-            // Encode to `jpg`
-            match encoder.write_image(_img.as_bytes(), img.width(), img.height(), img.color().into()) {
-                Ok(_) => Ok(()),
-                Err(err) => {
-                    // Delete unprocessed image
-                    fs::remove_file(new_path).unwrap();
-
-                    Err(err.to_string())
-                }
-            }
+          Err(err.to_string())
         }
-        ImageFormat::PNG => {
-            let new_file: File = File::create(new_path.clone()).unwrap();
-            let ref mut buff = BufWriter::new(new_file);
-            let encoder: PngEncoder<&mut BufWriter<File>>;
-
-            if data.quality != 100 {
-                encoder = PngEncoder::new_with_quality(
-                    buff,
-                    CompressionType::Default,
-                    FilterType::NoFilter,
-                );
-            } else {
-                encoder = PngEncoder::new(buff);
-            }
-
-            // Encode to `png`
-            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
-                Ok(_) => Ok(()),
-                Err(err) => {
-                    // Delete unprocessed image
-                    fs::remove_file(new_path).unwrap();
-
-                    Err(err.to_string())
-                }
-            }
-        }
-        ImageFormat::TIFF => {
-            let new_file: File = File::create(new_path.clone()).unwrap();
-            let ref mut buff = BufWriter::new(new_file);
-            let encoder = TiffEncoder::new(buff);
-
-            // Encode to `tiff`
-            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
-                Ok(_) => Ok(()),
-                Err(err) => {
-                    // Delete unprocessed image
-                    fs::remove_file(new_path).unwrap();
-
-                    Err(err.to_string())
-                }
-            }
-        }
-        ImageFormat::BMP => {
-            let new_file: File = File::create(new_path.clone()).unwrap();
-            let ref mut buff = BufWriter::new(new_file);
-            let encoder = BmpEncoder::new(buff);
-
-            // Encode to `bmp`
-            match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
-                Ok(_) => Ok(()),
-                Err(err) => {
-                    // Delete unprocessed image
-                    fs::remove_file(new_path).unwrap();
-
-                    Err(err.to_string())
-                }
-            }
-        }
-        ImageFormat::WEBP => {
-            if data.quality == 100 {
-                let new_file: File = File::create(new_path.clone()).unwrap();
-                let ref mut buff = BufWriter::new(new_file);
-                let encoder = WebPEncoder::new_lossless(buff);
-
-                // Encode to lossless `webp`
-                match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
-                    Ok(_) => Ok(()),
-                    Err(err) => {
-                        // Delete unprocessed image
-                        fs::remove_file(new_path).unwrap();
-
-                        Err(err.to_string())
-                    }
-                }
-            } else {
-                let encoder: Result<Encoder<'_>, &str> = Encoder::from_image(img);
-
-                match encoder {
-                    Ok(_encoder) => {
-                        let webp: WebPMemory = _encoder.encode(data.quality as f32);
-
-                        match fs::write(&new_path, &*webp) {
-                            Ok(_) => Ok(()),
-                            Err(err) => Err(err.to_string()),
-                        }
-                    }
-                    Err(err) => Err(err.to_string()),
-                }
-            }
-        }
+      }
     }
+    ImageFormat::PNG => {
+      let new_file: File = File::create(new_path.clone()).unwrap();
+      let ref mut buff = BufWriter::new(new_file);
+      let encoder: PngEncoder<&mut BufWriter<File>>;
+
+      if data.quality != 100 {
+        encoder = PngEncoder::new_with_quality(
+          buff,
+          CompressionType::Default,
+          FilterType::NoFilter
+        );
+      } else {
+        encoder = PngEncoder::new(buff);
+      }
+
+      // Encode to `png`
+      match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
+        Ok(_) => Ok(()),
+        Err(err) => {
+          // Delete unprocessed image
+          fs::remove_file(new_path).unwrap();
+
+          Err(err.to_string())
+        }
+      }
+    }
+    ImageFormat::TIFF => {
+      let new_file: File = File::create(new_path.clone()).unwrap();
+      let ref mut buff = BufWriter::new(new_file);
+      let encoder = TiffEncoder::new(buff);
+
+      // Encode to `tiff`
+      match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
+        Ok(_) => Ok(()),
+        Err(err) => {
+          // Delete unprocessed image
+          fs::remove_file(new_path).unwrap();
+
+          Err(err.to_string())
+        }
+      }
+    }
+    ImageFormat::BMP => {
+      let new_file: File = File::create(new_path.clone()).unwrap();
+      let ref mut buff = BufWriter::new(new_file);
+      let encoder = BmpEncoder::new(buff);
+
+      // Encode to `bmp`
+      match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
+        Ok(_) => Ok(()),
+        Err(err) => {
+          // Delete unprocessed image
+          fs::remove_file(new_path).unwrap();
+
+          Err(err.to_string())
+        }
+      }
+    }
+    ImageFormat::WEBP => {
+      if data.quality == 100 {
+        let new_file: File = File::create(new_path.clone()).unwrap();
+        let ref mut buff = BufWriter::new(new_file);
+        let encoder = WebPEncoder::new_lossless(buff);
+
+        // Encode to lossless `webp`
+        match encoder.write_image(img.as_bytes(), img.width(), img.height(), img.color().into()) {
+          Ok(_) => Ok(()),
+          Err(err) => {
+            // Delete unprocessed image
+            fs::remove_file(new_path).unwrap();
+
+            Err(err.to_string())
+          }
+        }
+      } else {
+        let encoder: Result<Encoder<'_>, &str> = Encoder::from_image(&img);
+
+        match encoder {
+          Ok(_encoder) => {
+            let webp: WebPMemory = _encoder.encode(data.quality as f32);
+
+            match fs::write(&new_path, &*webp) {
+              Ok(_) => Ok(()),
+              Err(err) => Err(err.to_string()),
+            }
+          }
+          Err(err) => Err(err.to_string()),
+        }
+      }
+    }
+    ImageFormat::JPEGXL => {
+      let is_lossless: bool = data.quality == 100;
+
+      let mut encoder: jpegxl_rs::encode::JxlEncoder<'_, '_> = encoder_builder().build().unwrap();
+
+      encoder.lossless = Some(is_lossless);
+      encoder.uses_original_profile = true;
+      encoder.quality = (data.quality as f32) / 100.0;
+
+      let encoded_image: Result<Vec<u8>, jpegxl_rs::EncodeError> = encoder.encode(&img.clone().into_rgb16(), img.width(), img.height());
+
+      match encoded_image {
+        Ok(encode) => {
+          match fs::write(&new_path, &*encode) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(err.to_string()),
+          }
+        }
+        Err(err) => Err(err.to_string()),
+      }
+    }
+  }
 }
 
 fn get_format_extension(format: ImageFormat) -> String {
-    match format {
-        ImageFormat::JPG => String::from("jpg"),
-        ImageFormat::PNG => String::from("png"),
-        ImageFormat::WEBP => String::from("webp"),
-        ImageFormat::TIFF => String::from("tiff"),
-        ImageFormat::BMP => String::from("bmp"),
-    }
+  match format {
+    ImageFormat::JPG => String::from("jpg"),
+    ImageFormat::PNG => String::from("png"),
+    ImageFormat::WEBP => String::from("webp"),
+    ImageFormat::TIFF => String::from("tiff"),
+    ImageFormat::BMP => String::from("bmp"),
+    ImageFormat::JPEGXL => String::from("jxl"),
+  }
 }
 
 #[tauri::command]
 async fn convert_images(files: Vec<Image>, folder_to_save: String) -> i8 {
-    let converted_images = process_images(files, folder_to_save.as_str()).await;
+  let converted_images = process_images(files, folder_to_save.as_str()).await;
 
-    return converted_images;
+  return converted_images;
 }
 
 fn main() {
-    tauri::Builder::default()
-        .plugin(tauri_plugin_store::Builder::new().build())
-        .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![convert_images])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+  tauri::Builder
+    ::default()
+    .plugin(tauri_plugin_store::Builder::new().build())
+    .plugin(tauri_plugin_shell::init())
+    .plugin(tauri_plugin_dialog::init())
+    .invoke_handler(tauri::generate_handler![convert_images])
+    .run(tauri::generate_context!())
+    .expect("error while running tauri application");
 }
