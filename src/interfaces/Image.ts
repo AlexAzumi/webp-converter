@@ -31,4 +31,5 @@ export enum ImageFormat {
   PNG,
   TIFF,
   BMP,
+  JPEGXL,
 }

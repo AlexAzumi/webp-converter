@@ -7,7 +7,13 @@
 
 Multi-platform desktop app that lets you convert `.webp` images to `.jpg` or `.png`, and viceversa!
 
+Now supporting partial `JPEG XL` support! (Only converts to `jxl`, not from `jxl`)
+
 ![WebP Converter](./screenshot.png)
+
+## Disclaimer ⚠️
+
+WebP Converter is only a wrapper of the `image`, `webp` and `jpegxl-rs` Rust crates. None of the image processing libraries are made by me. I just implement them in a simple and practical way for the end user.
 
 ## Installation
 
